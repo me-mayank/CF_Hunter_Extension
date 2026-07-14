@@ -1,14 +1,18 @@
 import { classifyGate } from './gateClassification.js';
 
 export function analyzeGate(contestInfo, hunterProfile) {
-    const { name, status, startTimeSeconds } = contestInfo;
+    const { name, phase, startTimeSeconds } = contestInfo;
     const classificationObj = classifyGate(name);
     const classification = classificationObj.label;
 
-    let gateStatus = status; // e.g. "BEFORE", "CODING", "FINISHED"
+    let gateStatus = "UNKNOWN";
+    if (phase === "BEFORE") gateStatus = "BEFORE";
+    else if (phase === "FINISHED") gateStatus = "FINISHED";
+    else if (phase) gateStatus = "RUNNING"; // CODING, PENDING_SYSTEM_TEST, SYSTEM_TEST
+
     let timeUntilOpen = null;
 
-    if (status === "BEFORE" && startTimeSeconds) {
+    if (gateStatus === "BEFORE" && startTimeSeconds) {
         const nowSeconds = Math.floor(Date.now() / 1000);
         timeUntilOpen = Math.max(0, startTimeSeconds - nowSeconds);
     }
@@ -82,6 +86,7 @@ export function analyzeGate(contestInfo, hunterProfile) {
     }
 
     return {
+        classificationObj,
         classification,
         status: gateStatus,
         timeUntilOpenSeconds: timeUntilOpen,

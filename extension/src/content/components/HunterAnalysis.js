@@ -101,9 +101,9 @@ export class HunterAnalysis {
             <div class="anim-seq delay-2" style="display: flex; gap: 12px; align-items: center; margin-bottom: 16px; justify-content: center;">
                 <img class="avatar" src="${avatarUrl}" alt="${profile.handle}" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 72 72%22><rect width=%2272%22 height=%2272%22 fill=%22%230f172a%22/><path d=%22M36 20C29.373 20 24 25.373 24 32C24 38.627 29.373 44 36 44C42.627 44 48 38.627 48 32C48 25.373 42.627 20 36 20ZM36 48C24.954 48 16 56.954 16 68H56C56 56.954 47.046 48 36 48Z%22 fill=%22%23334155%22/></svg>';">
                 <div style="display: flex; flex-direction: column;">
-                    <div class="hunter-name" style="color: var(--sys-frame-primary); font-size: 20px; text-shadow: none;">${(profile.displayName || profile.handle).toUpperCase()}</div>
-                    <div class="hunter-sub" style="color:${rankTier.color}; margin-top: 2px;">[${rankTier.label.toUpperCase()}]</div>
-                    <div class="hunter-sub" style="color:var(--sys-frame-primary); margin-top: 2px;">${hunterClassLabel.toUpperCase()}</div>
+                    <div class="hunter-name" style="color: var(--sys-frame-primary); font-size: 24px; text-shadow: none; font-weight: bold;">${(profile.displayName || profile.handle).toUpperCase()}</div>
+                    <div class="hunter-sub" style="color:${rankTier.color}; margin-top: 4px; font-size: 16px; font-family: var(--sys-font-secondary); letter-spacing: 1px;">[${rankTier.label.toUpperCase()}]</div>
+                    <div class="hunter-sub" style="color:var(--sys-frame-primary); margin-top: 4px; font-size: 16px; font-family: var(--sys-font-secondary); letter-spacing: 1px;">${hunterClassLabel.toUpperCase()}</div>
                 </div>
             </div>
         `;
@@ -112,31 +112,31 @@ export class HunterAnalysis {
         // --- Stats Row ---
         // Right-aligned values for tension and width utilization
         let statsHtml = `
-            <div class="anim-seq delay-3" style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; width: 100%;">
-                <div style="display: flex; flex-direction: column; gap: 2px;">
+            <div class="anim-seq delay-3" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 12px; width: 100%;">
+                <div style="display: flex; flex-direction: column; gap: 4px;">
                     <div style="display: flex; justify-content: space-between; align-items: baseline;">
-                        <div class="sys-label" style="font-size: 11px;">HUNTER LEVEL</div>
-                        <div class="sys-value" style="color: var(--sys-color-level); font-size: 14px;">Lv. ${profile.hunterLevel || 0}</div>
+                        <div class="sys-label" style="font-size: 14px;">HUNTER LEVEL</div>
+                        <div class="sys-value" style="color: var(--sys-color-level); font-size: 18px;">Lv. ${profile.hunterLevel || 0}</div>
                     </div>
-                    <div class="sys-label" style="font-size: 8px; margin-top: 4px; color: var(--sys-text-muted);">RANK PROGRESS</div>
-                    <div style="display: flex; align-items: center; gap: 6px; margin-top: 2px;">
-                        <div style="flex: 1; height: 2px; background: rgba(255,255,255,0.1); position: relative;">
+                    <div class="sys-label" style="font-size: 10px; margin-top: 4px; color: var(--sys-text-muted);">RANK PROGRESS</div>
+                    <div style="display: flex; align-items: center; gap: 8px; margin-top: 2px;">
+                        <div style="flex: 1; height: 3px; background: rgba(255,255,255,0.1); position: relative;">
                             <div style="position: absolute; top: 0; left: 0; height: 100%; width: ${progressPercent}%; background: ${rankTier.color}; box-shadow: 0 0 6px ${rankTier.color};"></div>
                         </div>
-                        <div class="sys-label" style="font-size: 8px; color: ${rankTier.color}; margin: 0;">${progressPercent.toFixed(1)}%</div>
+                        <div class="sys-label" style="font-size: 10px; color: ${rankTier.color}; margin: 0;">${progressPercent.toFixed(1)}%</div>
                     </div>
                 </div>
-                <div style="display: flex; justify-content: space-between; align-items: baseline; margin-top: 4px;">
-                    <div class="sys-label" style="font-size: 11px;">MONSTERS DEFEATED</div>
-                    <div class="sys-value" style="color: var(--sys-text); font-size: 13px;">${formatNumber(profile.problemsDefeated || 0)}</div>
+                <div style="display: flex; justify-content: space-between; align-items: baseline; margin-top: 8px;">
+                    <div class="sys-label" style="font-size: 14px;">MONSTERS DEFEATED</div>
+                    <div class="sys-value" style="color: var(--sys-text); font-size: 18px;">${formatNumber(profile.problemsDefeated || 0)}</div>
                 </div>
                 <div style="display: flex; justify-content: space-between; align-items: baseline;">
-                    <div class="sys-label" style="font-size: 11px;">DUNGEONS CLEARED</div>
-                    <div class="sys-value" style="color: var(--sys-text); font-size: 13px;">${formatNumber(profile.contestsParticipated || 0)}</div>
+                    <div class="sys-label" style="font-size: 14px;">DUNGEONS CLEARED</div>
+                    <div class="sys-value" style="color: var(--sys-text); font-size: 18px;">${formatNumber(profile.contestsParticipated || 0)}</div>
                 </div>
                 <div style="display: flex; justify-content: space-between; align-items: baseline;">
-                    <div class="sys-label" style="font-size: 11px;">HIGHEST NEUTRALIZED MONSTER</div>
-                    <div class="sys-value" style="color: ${peakMonsterColor}; font-size: 13px;">${peakMonsterName}</div>
+                    <div class="sys-label" style="font-size: 14px;">HIGHEST NEUTRALIZED MONSTER</div>
+                    <div class="sys-value" style="color: ${peakMonsterColor}; font-size: 16px;">${peakMonsterName}</div>
                 </div>
             </div>
         `;
@@ -146,8 +146,8 @@ export class HunterAnalysis {
 
         let bottomRowHtml = `
             <div class="anim-seq delay-5" style="display: flex; justify-content: space-between; align-items: baseline; width: 100%; margin-bottom: 4px;">
-                <div class="sys-label" style="font-size: 11px;">PRIMARY AFFINITY</div>
-                <div class="sys-value" style="color: ${primaryColor}; font-size: 13px;">${dominantSkill.toUpperCase()}</div>
+                <div class="sys-label" style="font-size: 14px;">PRIMARY AFFINITY</div>
+                <div class="sys-value" style="color: ${primaryColor}; font-size: 16px;">${dominantSkill.toUpperCase()}</div>
             </div>
         `;
         let comparisonHtml = '';

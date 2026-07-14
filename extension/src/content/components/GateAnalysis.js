@@ -96,14 +96,63 @@ export class GateAnalysis {
             return;
         }
 
-        const getShortVerdict = (verdict) => {
-            if (!verdict) return 'Scanning Status...';
-            if (verdict.includes('closed')) return 'Gate Closed. No Entry.';
-            if (verdict.includes('vastly exceeds')) return 'Proceed. Survival Probability: High.';
-            if (verdict.includes('meets recommended')) return 'Proceed. Survival Probability: Moderate.';
-            return 'High Risk. Survival Probability: Low.';
-        };
-        const shortRec = getShortVerdict(analysis.systemVerdict || "");
+        const hunterMana = window.hunterProfileCache ? window.hunterProfileCache.manaPower || 0 : 0;
+        const recMana = analysis.recommendedMana || 0;
+        
+        let titleColor = analysis.classificationObj.color;
+        let titleGlow = analysis.classificationObj.glow;
+
+        // Base Relative Threat Color
+        if (hunterMana < recMana) {
+            titleColor = "var(--sys-color-danger)"; // Red
+            titleGlow = "rgba(255, 94, 94, 0.6)";
+        } else if (hunterMana >= recMana * 1.5) {
+            titleColor = "var(--sys-color-level)"; // Greenish
+            titleGlow = "rgba(75, 227, 138, 0.6)";
+        } else {
+            titleColor = "var(--sys-text)"; // White
+            titleGlow = "rgba(255, 255, 255, 0.4)";
+        }
+
+        let shortRec = "";
+        if (analysis.status === "FINISHED") {
+            shortRec = "GATE CLOSED. VIRTUAL SIMULATION PERMITTED.";
+        } else if (analysis.status === "BEFORE") {
+            shortRec = "GATE OPENING IMPENDING.";
+        } else {
+            shortRec = "GATE IS OPEN. ENTER AT YOUR OWN RISK.";
+        }
+        
+        let relativeThreat = "EQUAL MATCH";
+        let growthLabel = "STEADY GROWTH EXPECTED";
+
+        if (hunterMana < recMana * 0.5) {
+            relativeThreat = "CATASTROPHIC RISK";
+            growthLabel = "EXTREME LEVEL-UP POTENTIAL";
+        } else if (hunterMana < recMana) {
+            relativeThreat = "HIGH RISK";
+            growthLabel = "SUBSTANTIAL GROWTH YIELD";
+        } else if (hunterMana >= recMana * 1.5) {
+            relativeThreat = "NO THREAT";
+            growthLabel = "NEGLIGIBLE GROWTH YIELD";
+        } else if (hunterMana >= recMana) {
+            relativeThreat = "LOW RISK";
+            growthLabel = "MODERATE GROWTH YIELD";
+        }
+
+        if (analysis.status === "FINISHED") {
+            relativeThreat += " [VIRTUAL]";
+            growthLabel += " [VIRTUAL]";
+        }
+
+        
+        // Format duration
+        let durationText = "UNKNOWN";
+        if (this._contest && this._contest.durationSeconds) {
+            const hrs = Math.floor(this._contest.durationSeconds / 3600);
+            const mins = Math.floor((this._contest.durationSeconds % 3600) / 60);
+            durationText = hrs > 0 ? `${hrs}h ${mins > 0 ? mins + 'm' : ''}` : `${mins}m`;
+        }
 
         this.shadowRoot.innerHTML = `
             <style>
@@ -130,28 +179,25 @@ export class GateAnalysis {
                     align-items: center;
                 }
                 .gate-title {
-                    font-size: 42px;
+                    font-size: 36px;
                     font-weight: 700;
-                    color: var(--sys-text);
-                    margin-bottom: 8px;
+                    color: ${titleColor};
+                    text-shadow: 0 0 10px ${titleGlow};
+                    margin-bottom: 12px;
                     letter-spacing: 1px;
                     font-family: var(--sys-font-primary);
+                    text-align: center;
+                    line-height: 1.2;
                 }
                 .system-rec {
-                    font-size: 28px;
+                    font-size: 16px;
                     font-weight: bold;
-                    color: var(--sys-frame-primary);
+                    color: ${titleColor};
                     text-transform: uppercase;
-                    letter-spacing: 1px;
+                    letter-spacing: 2px;
                     text-align: center;
                     margin-top: 16px;
                     font-family: var(--sys-font-primary);
-                }
-                .divider {
-                    height: 1px;
-                    background: linear-gradient(90deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.02) 100%);
-                    width: 100%;
-                    margin: 8px 0;
                 }
                 @keyframes sys-fade-in {
                     from { opacity: 0; transform: translateY(10px); filter: blur(4px); }
@@ -161,64 +207,32 @@ export class GateAnalysis {
                     opacity: 0;
                     animation: sys-fade-in 0.4s ease-out forwards;
                 }
-                .delay-1 { animation-delay: 0.6s; }
-                .delay-2 { animation-delay: 0.7s; }
-                .delay-3 { animation-delay: 0.8s; }
-                .delay-4 { animation-delay: 0.9s; }
-                .delay-5 { animation-delay: 1.0s; }
-                .delay-6 { animation-delay: 1.1s; }
+                .delay-2 { animation-delay: 0.2s; }
+                .delay-3 { animation-delay: 0.3s; }
+                .delay-5 { animation-delay: 0.5s; }
             </style>
 
-            <div id="header-container" class="anim-seq delay-1"></div>
-
-            <div class="gate-title anim-seq delay-2">${analysis.gateName}</div>
-            
-            <div class="divider anim-seq delay-2"></div>
-
             <div class="status-container">
-                <div class="stat-row anim-seq delay-3">
-                    <div class="sys-label">Gate Rank</div>
-                    <div class="sys-value" style="color: ${analysis.classificationObj.color}; text-shadow: 0 0 5px ${analysis.classificationObj.glow};">${analysis.classification.toUpperCase()}</div>
-                </div>
-                <div class="stat-row anim-seq delay-3">
-                    <div class="sys-label">Contest Status</div>
-                    <div class="sys-value" style="color: #8a6bff;">${analysis.status}</div>
-                </div>
-
-                <div class="divider anim-seq delay-3"></div>
-
-                <div class="stat-row anim-seq delay-4">
-                    <div class="sys-label">Recommended Hunter Rank</div>
-                    <div class="sys-value" style="color: var(--sys-color-level); font-size: 20px;">RATING ${analysis.recommendedMana}</div>
-                </div>
-                <div class="stat-row anim-seq delay-4">
-                    <div class="sys-label">Recommended Hunter Level</div>
-                    <div class="sys-value" style="color: var(--sys-color-level); font-size: 20px;">Lv. <span class="anim-num" data-target-num="${Math.floor(analysis.recommendedMana / 50)}">0</span></div>
+                <div class="gate-title anim-seq delay-2">${analysis.gateName}</div>
+                
+                <div class="stat-row anim-seq delay-3" style="justify-content: center; gap: 12px; margin-top: 12px; flex-wrap: wrap;">
+                    <div style="border: 1px solid ${analysis.classificationObj.color}; color: ${analysis.classificationObj.color}; padding: 6px 14px; font-size: 13px; font-family: var(--sys-font-secondary); text-transform: uppercase; font-weight: bold; background: rgba(0,0,0,0.5); border-radius: 4px; letter-spacing: 1px;">
+                        ▲ ${analysis.classification}
+                    </div>
+                    <div style="border: 1px solid ${titleColor}; color: ${titleColor}; text-shadow: 0 0 5px ${titleGlow}; box-shadow: inset 0 0 10px ${titleGlow}; padding: 6px 14px; font-size: 13px; font-family: var(--sys-font-secondary); text-transform: uppercase; font-weight: bold; background: rgba(0,0,0,0.5); border-radius: 4px; letter-spacing: 1px;">
+                        ◆ THREAT: ${relativeThreat}
+                    </div>
+                    <div style="border: 1px solid rgba(255,255,255,0.2); color: var(--sys-text); padding: 6px 14px; font-size: 13px; font-family: var(--sys-font-secondary); text-transform: uppercase; font-weight: bold; background: rgba(0,0,0,0.5); border-radius: 4px; letter-spacing: 1px;">
+                        ⏱ DURATION: ${durationText}
+                    </div>
                 </div>
 
-                <div class="divider anim-seq delay-4"></div>
-
-                <div class="stat-row anim-seq delay-5">
-                    <div class="sys-label">Threat Level</div>
-                    <div class="sys-value" style="color: var(--sys-color-danger);">${analysis.threatLevel || "UNKNOWN"}</div>
+                <div class="system-rec anim-seq delay-5">${shortRec}</div>
+                <div class="growth-rec anim-seq delay-5" style="font-size: 13px; color: var(--sys-text-muted); text-align: center; margin-top: 6px; letter-spacing: 1px; font-family: var(--sys-font-primary);">
+                    SYSTEM PREDICTION: <span style="color: var(--sys-frame-primary);">${growthLabel}</span>
                 </div>
-                <div class="stat-row anim-seq delay-5">
-                    <div class="sys-label">Expected Reward</div>
-                    <div class="sys-value" style="color: rgba(255, 207, 107, 1);">${analysis.expectedReward || "UNKNOWN"}</div>
-                </div>
-                <div class="stat-row anim-seq delay-5">
-                    <div class="sys-label">Estimated Completion Difficulty</div>
-                    <div class="sys-value" style="color: var(--sys-frame-primary);">${analysis.estimatedDifficulty || "UNKNOWN"}</div>
-                </div>
-
-                <div class="divider anim-seq delay-5"></div>
-
-                <div class="system-rec anim-seq delay-6">${shortRec}</div>
             </div>
         `;
-        
-        const header = new SystemHeader('GATE ANALYSIS');
-        this.shadowRoot.getElementById('header-container').appendChild(header.element);
 
         // Animate Numbers
         setTimeout(() => {

@@ -6,7 +6,7 @@ import { GateAnalysis } from './components/GateAnalysis.js';
 import { SystemNotification } from './components/SystemNotification.js';
 import { scrapeProfile, scrapeLoggedInHandle } from './scrapers/profileScraper.js';
 import { scrapeProblem } from './scrapers/problemScraper.js';
-import { scrapeContest } from './scrapers/contestScraper.js';
+import { extractContestIdFromUrl, fetchContestInfo } from '../api/contestApiClient.js';
 import { getCachedProfile, setCachedProfile } from '../storage/profileCache.js';
 import { startRegistrationStream } from './sse/registrationStream.js';
 import { checkMilestones } from './hud/systemWindows.js';
@@ -277,10 +277,17 @@ async function handleProblemPage(hud) {
 
 async function handleContestPage(hud) {
     const handle = scrapeLoggedInHandle();
-    const contest = scrapeContest();
+    
+    const contestParams = extractContestIdFromUrl(window.location.href);
+    if (!contestParams) {
+        updateHUDContent(hud, `<div style="text-align:center; padding: 24px; font-family: var(--sys-font-secondary); color: var(--sys-text-muted);">No Gate Detected in URL.</div>`);
+        return;
+    }
 
-    if (!contest.name) {
-        updateHUDContent(hud, `<div style="text-align:center; padding: 24px; font-family: var(--sys-font-secondary); color: var(--sys-text-muted);">No Gate Detected.</div>`);
+    const contest = await fetchContestInfo(contestParams.id, contestParams.type);
+
+    if (!contest) {
+        updateHUDContent(hud, `<div style="text-align:center; padding: 24px; font-family: var(--sys-font-secondary); color: var(--sys-text-muted);">Unable to sync Gate data from System API.</div>`);
         return;
     }
 

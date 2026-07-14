@@ -11,9 +11,9 @@ export function renderManaGauge(currentMana, peakMana, color = 'var(--sys-color-
     return `
         <div class="mana-gauge-container ${delayClass}" style="width: 100%; margin: 8px 0 12px 0; display: flex; flex-direction: column; gap: 4px;">
             <div style="display: flex; justify-content: space-between; align-items: flex-end; padding: 0 2px;">
-                <div class="sys-label" style="font-size: 10px;">MANA POWER</div>
+                <div class="sys-label" style="font-size: 14px;">MANA POWER</div>
                 <div style="display: flex; gap: 8px; align-items: baseline;">
-                    <div class="sys-value" style="color: ${color}; font-size: 12px;">${Math.floor(currentMana)}</div>
+                    <div class="sys-value" style="color: ${color}; font-size: 18px;">${Math.floor(currentMana)}</div>
                     ${rightLabelHtml}
                 </div>
             </div>
@@ -25,7 +25,7 @@ export function renderManaGauge(currentMana, peakMana, color = 'var(--sys-color-
                 <!-- Peak Marker -->
                 ${peakClamped > 0 ? `
                     <div style="position: absolute; top: -4px; bottom: -4px; left: ${peakPercent}%; width: 2px; background: #fff; box-shadow: 0 0 6px #fff; z-index: 2;"></div>
-                    <div style="position: absolute; top: -14px; left: calc(${peakPercent}% - 12px); width: 24px; text-align: center; color: #fff; font-size: 8px; font-family: var(--sys-font-secondary); text-shadow: 0 0 4px #fff; pointer-events: none;">PEAK</div>
+                    <div style="position: absolute; top: -14px; left: calc(${peakPercent}% - 14px); width: 28px; text-align: center; color: #fff; font-size: 10px; font-family: var(--sys-font-secondary); text-shadow: 0 0 4px #fff; pointer-events: none;">PEAK</div>
                 ` : ''}
                 
                 <!-- Ticks -->
