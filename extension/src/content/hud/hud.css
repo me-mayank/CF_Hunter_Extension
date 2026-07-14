@@ -22,8 +22,6 @@
     right: 20px;
     width: 380px;
     z-index: 999999;
-    filter: drop-shadow(0 0 10px rgba(58, 214, 255, 0.4));
-    animation: frame-pulse 4s infinite alternate ease-in-out;
 }
 
 .geometric-frame-container {

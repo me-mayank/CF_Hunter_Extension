@@ -79,7 +79,9 @@ export class HunterAnalysis {
         
         // Fix peak monster name to include rating
         const highestRating = profile.highestMonsterDefeated || 0;
+        const peakMonsterTier = translateRank(highestRating);
         const peakMonsterName = highestRating > 0 ? `${getMonsterName(highestRating)} (${highestRating})` : "None";
+        const peakMonsterColor = highestRating > 0 ? peakMonsterTier.color : "var(--sys-text)";
         
         const peakMana = Math.max(profile.manaPower || 0, profile.peakManaPower || 0) || 1;
         const manaPercent = Math.min(100, ((profile.manaPower || 0) / peakMana) * 100);
@@ -114,7 +116,7 @@ export class HunterAnalysis {
                 <div style="display: flex; flex-direction: column; gap: 2px;">
                     <div style="display: flex; justify-content: space-between; align-items: baseline;">
                         <div class="sys-label" style="font-size: 11px;">HUNTER LEVEL</div>
-                        <div class="sys-value" style="color: var(--sys-color-level); font-size: 14px;">${profile.hunterLevel || 0}</div>
+                        <div class="sys-value" style="color: var(--sys-color-level); font-size: 14px;">Lv. ${profile.hunterLevel || 0}</div>
                     </div>
                     <div class="sys-label" style="font-size: 8px; margin-top: 4px; color: var(--sys-text-muted);">RANK PROGRESS</div>
                     <div style="display: flex; align-items: center; gap: 6px; margin-top: 2px;">
@@ -133,8 +135,8 @@ export class HunterAnalysis {
                     <div class="sys-value" style="color: var(--sys-text); font-size: 13px;">${formatNumber(profile.contestsParticipated || 0)}</div>
                 </div>
                 <div style="display: flex; justify-content: space-between; align-items: baseline;">
-                    <div class="sys-label" style="font-size: 11px;">PEAK MONSTER</div>
-                    <div class="sys-value" style="color: var(--sys-text); font-size: 13px;">${peakMonsterName}</div>
+                    <div class="sys-label" style="font-size: 11px;">HIGHEST NEUTRALIZED MONSTER</div>
+                    <div class="sys-value" style="color: ${peakMonsterColor}; font-size: 13px;">${peakMonsterName}</div>
                 </div>
             </div>
         `;
@@ -143,7 +145,7 @@ export class HunterAnalysis {
         const primaryColor = SKILL_COLORS[dominantLower] || 'var(--sys-frame-primary)';
 
         let bottomRowHtml = `
-            <div class="anim-seq delay-5" style="display: flex; justify-content: space-between; align-items: baseline; width: 100%; margin-bottom: 12px;">
+            <div class="anim-seq delay-5" style="display: flex; justify-content: space-between; align-items: baseline; width: 100%; margin-bottom: 4px;">
                 <div class="sys-label" style="font-size: 11px;">PRIMARY AFFINITY</div>
                 <div class="sys-value" style="color: ${primaryColor}; font-size: 13px;">${dominantSkill.toUpperCase()}</div>
             </div>
@@ -163,14 +165,10 @@ export class HunterAnalysis {
             const threatLabel = threatData.label;
 
             comparisonHtml = `
-                <div class="anim-seq delay-6" style="display: flex; flex-direction: column; align-items: center; margin-top: 16px; gap: 8px;">
+                <div class="anim-seq delay-6" style="display: flex; flex-direction: column; align-items: center; margin-top: 2px; margin-bottom: 2px;">
                     <div style="text-align: center;">
-                        <div class="sys-label" style="font-size: 11px;">THREAT ASSESSMENT</div>
-                        <div class="sys-value" style="color: ${threatColor}; font-size: 15px; margin-top: 2px;">${threatLabel.toUpperCase()}</div>
-                    </div>
-                    <div style="text-align: center;">
-                        <div class="sys-label" style="font-size: 11px;">SYSTEM RECOMMENDATION</div>
-                        <div class="sys-value" style="color: ${recColor}; font-size: 15px; margin-top: 2px;">${recLabel.toUpperCase()}</div>
+                        <div class="sys-label" style="font-size: 11px;">SYSTEM VERDICT</div>
+                        <div class="sys-value" style="color: ${recColor}; font-size: 19px; font-weight: bold; margin-top: 4px; text-shadow: 0 0 12px ${recColor}; letter-spacing: 1px;">${recLabel.toUpperCase()}</div>
                     </div>
                 </div>
             `;
@@ -185,7 +183,7 @@ export class HunterAnalysis {
             
             ${bottomRowHtml}
 
-            ${isComparison ? `<div class="anim-seq delay-6" style="height: 1px; background: rgba(255,255,255,0.1); margin: 8px 0; width: 100%;"></div>${comparisonHtml}` : ''}
+            ${isComparison ? `<div class="anim-seq delay-6" style="height: 1px; background: rgba(255,255,255,0.15); margin: 4px 0 6px 0; width: 100%;"></div>${comparisonHtml}` : ''}
         `;
 
         this.shadowRoot.innerHTML = `

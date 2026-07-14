@@ -23,6 +23,7 @@ export class SystemGlass {
                     opacity: 0;
                     animation: glass-appear 0.5s ease-out 0.2s forwards;
                     overflow: hidden;
+                    min-height: 0;
                 }
 
                 .gradient-overlay {
@@ -58,6 +59,7 @@ export class SystemGlass {
                     box-sizing: border-box;
                     overflow-x: hidden;
                     transition: filter 0.2s;
+                    min-height: 0;
                 }
 
                 /* Custom Scrollbar for holographic feel */
@@ -78,8 +80,8 @@ export class SystemGlass {
                     content: '';
                     position: absolute;
                     top: -10%; left: 0; right: 0; height: 10px;
-                    background: rgba(0, 240, 255, 0.4);
-                    box-shadow: 0 0 20px rgba(0, 240, 255, 0.8);
+                    background: rgba(0, 240, 255, 0.62);
+                    box-shadow: 0 0 31px rgba(0, 240, 255, 1.0);
                     animation: scanline 0.8s linear;
                     pointer-events: none;
                     z-index: 100;
@@ -97,8 +99,8 @@ export class SystemGlass {
                 @keyframes rgb-split {
                     0% { text-shadow: none; transform: none; }
                     100% { 
-                        text-shadow: -2px 0 red, 2px 0 cyan; 
-                        transform: translate(-1px, 1px);
+                        text-shadow: -3.1px 0 red, 3.1px 0 cyan; 
+                        transform: translate(-1.5px, 1.5px);
                     }
                 }
 
@@ -107,12 +109,12 @@ export class SystemGlass {
                 }
                 @keyframes flicker {
                     0% { opacity: 1; }
-                    50% { opacity: 0.8; }
+                    50% { opacity: 0.65; }
                     100% { opacity: 1; }
                 }
 
                 .glitch-distortion {
-                    filter: hue-rotate(90deg) contrast(150%) blur(1px);
+                    filter: hue-rotate(140deg) contrast(175%) blur(1.5px);
                 }
             </style>
             <div class="noise"></div>
@@ -138,13 +140,12 @@ export class SystemGlass {
                 container.classList.remove(effect);
             }, effect === 'glitch-scanline' ? 800 : 150);
 
-            // Schedule next glitch between 10-15s
-            const nextTime = 10000 + Math.random() * 5000;
-            setTimeout(triggerGlitch, nextTime);
+            // Schedule next glitch at exactly 10s
+            setTimeout(triggerGlitch, 10000);
         };
 
         // Start first glitch
-        setTimeout(triggerGlitch, 10000 + Math.random() * 5000);
+        setTimeout(triggerGlitch, 10000);
     }
 }
 
