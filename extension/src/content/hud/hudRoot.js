@@ -23,19 +23,20 @@ export function initHUD(pageType) {
             font-style: normal;
         }
         .system-online-badge {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
             background: rgba(10, 20, 30, 0.8);
             color: #38aaff;
             border: 1px solid #38aaff;
-            padding: 8px 16px;
+            padding: 3px 12px;
             font-family: 'Orbitron', sans-serif;
             font-size: 12px;
             cursor: pointer;
-            z-index: 10000;
             box-shadow: 0 0 10px rgba(56, 170, 255, 0.4);
             animation: pulse 2s infinite;
+            border-radius: 3px;
+            font-weight: bold;
+            display: inline-block;
+            vertical-align: middle;
+            line-height: normal;
         }
         @keyframes pulse {
             0% { box-shadow: 0 0 5px rgba(56, 170, 255, 0.4); }
@@ -49,13 +50,33 @@ export function initHUD(pageType) {
             z-index: 100;
         }
     `;
+    // We need to inject styles into document head so the nav bar badge gets them
+    const globalStyleTag = document.createElement('style');
+    globalStyleTag.textContent = styleTag.textContent;
+    document.head.appendChild(globalStyleTag);
+
     shadow.appendChild(styleTag);
 
     // Create the separate Online Badge
     const onlineBadge = document.createElement('div');
     onlineBadge.className = 'system-online-badge';
-    onlineBadge.textContent = 'SYSTEM ONLINE';
-    shadow.appendChild(onlineBadge);
+    onlineBadge.textContent = 'SYSTEM';
+
+    // Inject into CF Nav Bar
+    const navBar = document.querySelector('.menu-list.main-menu-list');
+    if (navBar) {
+        const li = document.createElement('li');
+        li.style.cssText = 'float: left; margin-left: 15px; line-height: 3em;';
+        li.appendChild(onlineBadge);
+        navBar.appendChild(li);
+    } else {
+        // Fallback if nav bar not found
+        onlineBadge.style.position = 'fixed';
+        onlineBadge.style.bottom = '20px';
+        onlineBadge.style.right = '20px';
+        onlineBadge.style.zIndex = '10000';
+        document.body.appendChild(onlineBadge);
+    }
 
     // Create System Frame container
     const frameComponent = new SystemFrame();
@@ -90,6 +111,12 @@ export function initHUD(pageType) {
 
     document.addEventListener('hunter-system-minimize', () => {
         container.style.display = 'none';
+    });
+
+    chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+        if (request.type === 'TOGGLE_HUD') {
+            container.style.display = container.style.display === 'none' ? 'block' : 'none';
+        }
     });
     
     const savedState = loadHUDState() || { collapsed: false, left: null, top: null };
