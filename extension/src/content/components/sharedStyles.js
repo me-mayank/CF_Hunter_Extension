@@ -9,7 +9,7 @@ export const systemTokens = `
         --sys-glass-border: #69D6FF;
         
         /* Glass Material */
-        --sys-glass-bg: rgba(14, 34, 59, 0.65);
+        --sys-glass-bg: rgba(14, 34, 59, 0.75);
         --sys-blur: blur(8px);
         
         /* Line Weights */
