@@ -223,15 +223,17 @@ export class MonsterAnalysis {
 
             <div class="status-container" style="justify-content: flex-start; padding: 0 10px 4px 10px;">
                 <!-- MONSTER DETECTED -->
-                <div class="sys-label anim-seq delay-2" style="font-size: 11px; margin-bottom: 2px;">MONSTER DETECTED</div>
-                <div class="anim-seq delay-2" style="color: ${analysis.threatColor}; text-shadow: 0 0 10px ${analysis.threatGlow}; font-family: var(--sys-font-primary); font-size: 22px; font-weight: 700; margin-bottom: 2px; line-height: 1.1;">
-                    ${problem.name || problem.id || "Unknown Entity"}
-                </div>
-                <div class="sys-label anim-seq delay-2" style="text-transform: none; margin-bottom: 4px; font-size: 11px;">
-                    Rating: <span class="anim-num" data-target-num="${problem.rating || 0}">0</span>
-                </div>
-                <div class="anim-seq delay-3" style="align-self: flex-start; border: 1px solid ${analysis.threatColor}; color: ${analysis.threatColor}; padding: 2px 6px; font-size: 10px; font-family: var(--sys-font-secondary); text-transform: uppercase; font-weight: bold; background: rgba(0,0,0,0.5);">
-                    ▲ ${analysis.threatLabel}
+                <div style="display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 12px;">
+                    <div class="sys-label anim-seq delay-2" style="font-size: 11px; margin-bottom: 4px;">MONSTER DETECTED</div>
+                    <div class="anim-seq delay-2" style="color: ${analysis.threatColor}; text-shadow: 0 0 10px ${analysis.threatGlow}; font-family: var(--sys-font-primary); font-size: 24px; font-weight: 700; margin-bottom: 4px; line-height: 1.1;">
+                        ${problem.name || problem.id || "Unknown Entity"}
+                    </div>
+                    <div class="sys-label anim-seq delay-2" style="text-transform: none; margin-bottom: 8px; font-size: 12px;">
+                        Rating: <span class="anim-num" data-target-num="${problem.rating || 0}">0</span>
+                    </div>
+                    <div class="anim-seq delay-3" style="border: 1px solid ${analysis.threatColor}; color: ${analysis.threatColor}; padding: 3px 10px; font-size: 11px; font-family: var(--sys-font-secondary); text-transform: uppercase; font-weight: bold; background: rgba(0,0,0,0.5); border-radius: 2px;">
+                        ▲ ${analysis.threatLabel}
+                    </div>
                 </div>
 
                 <!-- THREAT VS MANA POWER -->
@@ -243,24 +245,27 @@ export class MonsterAnalysis {
                     `<div class="sys-value" style="color: rgba(255, 207, 107, 1); font-size: 12px; font-family: var(--sys-font-secondary);">+<span class="anim-num" data-target-num="${expReward}">0</span> XP</div>`
                 )}
 
-                <!-- RECOMMENDED STRATEGY -->
-                <div class="anim-seq delay-5" style="margin-bottom: 8px; border-left: 2px solid var(--sys-frame-primary); padding-left: 8px;">
-                    <div style="color: var(--sys-text); font-family: var(--sys-font-secondary); font-size: 12px; font-style: italic; line-height: 1.3;">
+                <!-- SYSTEM VERDICT -->
+                <div class="anim-seq delay-5" style="margin: 16px 0 12px 0; text-align: center; border-top: 1px solid rgba(255,255,255,0.1); border-bottom: 1px solid rgba(255,255,255,0.1); padding: 10px 0;">
+                    <div class="sys-label" style="font-size: 10px; margin-bottom: 6px; letter-spacing: 2px;">SYSTEM VERDICT</div>
+                    <div style="color: ${analysis.threatColor}; text-shadow: 0 0 8px ${analysis.threatGlow}; font-family: var(--sys-font-primary); font-size: 13px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">
                         ${getRecommendedStrategy(analysis.threatLabel)}
                     </div>
                 </div>
 
                 <!-- SKILL AFFINITIES -->
-                <div class="sys-section-header anim-seq delay-6" style="font-size: 12px;">${LABELS.SKILLS_REQUIRED}</div>
-                <div class="anim-seq delay-6" style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: auto; padding-bottom: 2px; margin-top: 4px;">
-                    ${uniqueTags.map(translated => {
-                        const upper = translated.toUpperCase();
-                        const lower = translated.toLowerCase();
-                        const matchesViewer = profile && profile.skillAffinities && profile.skillAffinities[lower];
-                        const pillColor = SKILL_COLORS[lower] || 'var(--sys-frame-primary)';
-                        const borderStyle = matchesViewer ? `1px solid ${pillColor}` : `1px dashed ${pillColor}`;
-                        return "<div style=\"border: " + borderStyle + "; color: " + pillColor + "; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-family: var(--sys-font-secondary); text-transform: uppercase;\">◆ " + upper + "</div>";
-                    }).join('')}
+                <div style="display: flex; flex-direction: column; align-items: center; margin-top: 4px;">
+                    <div class="sys-section-header anim-seq delay-6" style="font-size: 11px; margin-bottom: 6px;">${LABELS.SKILLS_REQUIRED}</div>
+                    <div class="anim-seq delay-6" style="display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; margin-bottom: auto; padding-bottom: 2px;">
+                        ${uniqueTags.map(translated => {
+                            const upper = translated.toUpperCase();
+                            const lower = translated.toLowerCase();
+                            const matchesViewer = profile && profile.skillAffinities && profile.skillAffinities[lower];
+                            const pillColor = SKILL_COLORS[lower] || 'var(--sys-frame-primary)';
+                            const borderStyle = matchesViewer ? `1px solid ${pillColor}` : `1px dashed ${pillColor}`;
+                            return "<div style=\"border: " + borderStyle + "; color: " + pillColor + "; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-family: var(--sys-font-secondary); text-transform: uppercase;\">◆ " + upper + "</div>";
+                        }).join('')}
+                    </div>
                 </div>
 
                 <!-- FOOTER -->

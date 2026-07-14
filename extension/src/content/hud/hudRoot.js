@@ -22,26 +22,60 @@ export function initHUD(pageType) {
             font-weight: normal;
             font-style: normal;
         }
+        .system-badge-container {
+            float: left;
+            margin-left: 15px;
+            height: 3em;
+            display: flex;
+            align-items: center;
+        }
         .system-online-badge {
+            position: relative;
             background: rgba(10, 20, 30, 0.8);
             color: #38aaff;
-            border: 1px solid #38aaff;
-            padding: 3px 12px;
             font-family: 'Orbitron', sans-serif;
-            font-size: 12px;
+            font-size: 11px;
             cursor: pointer;
-            box-shadow: 0 0 10px rgba(56, 170, 255, 0.4);
-            animation: pulse 2s infinite;
-            border-radius: 3px;
+            border-radius: 4px;
             font-weight: bold;
-            display: inline-block;
-            vertical-align: middle;
-            line-height: normal;
+            height: 2.4em;
+            padding: 0 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(56, 170, 255, 0.2);
         }
-        @keyframes pulse {
-            0% { box-shadow: 0 0 5px rgba(56, 170, 255, 0.4); }
-            50% { box-shadow: 0 0 15px rgba(56, 170, 255, 0.8); }
-            100% { box-shadow: 0 0 5px rgba(56, 170, 255, 0.4); }
+        
+        .system-online-badge::before {
+            content: '';
+            position: absolute;
+            width: 250%;
+            height: 250%;
+            background: conic-gradient(from 0deg, transparent 70%, #38aaff 100%);
+            animation: badge-rotate 2.5s linear infinite;
+            z-index: 0;
+        }
+
+        .system-online-badge::after {
+            content: '';
+            position: absolute;
+            inset: 1.5px;
+            background: rgba(10, 20, 30, 0.95);
+            border-radius: 2.5px;
+            z-index: 1;
+        }
+
+        .system-online-badge > span {
+            position: relative;
+            z-index: 2;
+            letter-spacing: 0.5px;
+            text-shadow: 0 0 8px rgba(56, 170, 255, 0.6);
+        }
+
+        @keyframes badge-rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
         .drag-handle {
             position: absolute;
@@ -60,13 +94,15 @@ export function initHUD(pageType) {
     // Create the separate Online Badge
     const onlineBadge = document.createElement('div');
     onlineBadge.className = 'system-online-badge';
-    onlineBadge.textContent = 'SYSTEM';
+    const badgeText = document.createElement('span');
+    badgeText.textContent = 'SYSTEM';
+    onlineBadge.appendChild(badgeText);
 
     // Inject into CF Nav Bar
     const navBar = document.querySelector('.menu-list.main-menu-list');
     if (navBar) {
         const li = document.createElement('li');
-        li.style.cssText = 'float: left; margin-left: 15px; line-height: 3em;';
+        li.className = 'system-badge-container';
         li.appendChild(onlineBadge);
         navBar.appendChild(li);
     } else {
@@ -106,16 +142,24 @@ export function initHUD(pageType) {
     frameComponent.appendChild(content);
 
     onlineBadge.onclick = () => {
-        container.style.display = container.style.display === 'none' ? 'block' : 'none';
+        const isHidden = container.style.display === 'none';
+        container.style.display = isHidden ? 'block' : 'none';
+        savedState.collapsed = !isHidden;
+        saveHUDState(savedState);
     };
 
     document.addEventListener('hunter-system-minimize', () => {
         container.style.display = 'none';
+        savedState.collapsed = true;
+        saveHUDState(savedState);
     });
 
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         if (request.type === 'TOGGLE_HUD') {
-            container.style.display = container.style.display === 'none' ? 'block' : 'none';
+            const isHidden = container.style.display === 'none';
+            container.style.display = isHidden ? 'block' : 'none';
+            savedState.collapsed = !isHidden;
+            saveHUDState(savedState);
         }
     });
     
@@ -131,6 +175,11 @@ export function initHUD(pageType) {
         // Default positioning floating above the badge
         container.style.bottom = '60px';
         container.style.right = '20px';
+    }
+
+    // Apply collapsed state
+    if (savedState.collapsed) {
+        container.style.display = 'none';
     }
 
     shadow.appendChild(container);
