@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hunter System Options</title>
+    <style>
+        @font-face {
+            font-family: 'Share Tech Mono';
+            src: url('../assets/fonts/ShareTechMono.ttf') format('truetype');
+        }
+        body {
+            background-color: #050a14;
+            color: #d8f0ff;
+            font-family: 'Share Tech Mono', monospace;
+            padding: 20px;
+            width: 300px;
+        }
+        h2 {
+            color: #3ad6ff;
+            text-shadow: 0 0 10px rgba(58,214,255,0.4);
+            margin-top: 0;
+            text-transform: uppercase;
+        }
+        .option-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid rgba(58,214,255,0.3);
+            background: rgba(5,10,20,0.8);
+        }
+        .status {
+            margin-top: 20px;
+            color: #4ade80;
+            font-size: 14px;
+            min-height: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h2>[ SYSTEM OPTIONS ]</h2>
+    
+    <div class="option-row">
+        <span>Enable Sound Effects:</span>
+        <input type="checkbox" id="soundToggle">
+    </div>
+
+    <div id="status" class="status"></div>
+
+    <script src="options.js"></script>
+</body>
+</html>

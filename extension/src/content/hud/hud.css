@@ -1,0 +1,514 @@
+:host {
+    all: initial; /* Reset all inherited styles from host page */
+    --sys-bg: #050a14;
+    --sys-accent: #3ad6ff;
+    --sys-text: #ffffff;
+    --sys-text-muted: #8a8f98;
+    
+    --sys-green: #4ade80;
+    --sys-yellow: #facc15;
+    --sys-red: #f87171;
+    --sys-purple: #a855f7;
+    
+    --sys-glow: rgba(58, 214, 255, 0.4);
+    --sys-glow-strong: rgba(58, 214, 255, 0.7);
+    --sys-font: 'Share Tech Mono', monospace;
+}
+
+/* Base Panel Styles */
+.hunter-hud-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 380px;
+    z-index: 999999;
+    filter: drop-shadow(0 0 10px rgba(58, 214, 255, 0.4));
+    animation: frame-pulse 4s infinite alternate ease-in-out;
+}
+
+.geometric-frame-container {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.geo-line {
+    position: absolute;
+    background: var(--sys-accent);
+    box-shadow: 0 0 10px var(--sys-glow);
+}
+
+.geo-inner {
+    background: rgba(58, 214, 255, 0.4);
+    box-shadow: 0 0 5px rgba(58, 214, 255, 0.2);
+}
+
+.geo-accent {
+    background: #fff;
+    box-shadow: 0 0 12px var(--sys-accent);
+}
+
+.holographic-glass {
+    position: absolute;
+    inset: 1px;
+    background: rgba(2, 5, 12, 0.9);
+    backdrop-filter: blur(8px);
+    clip-path: polygon(
+        15px 0, 43px 0, 48px 5px, calc(100% - 48px) 5px, calc(100% - 43px) 0, calc(100% - 15px) 0, 
+        100% 15px, 100% calc(100% - 15px), 
+        calc(100% - 15px) 100%, calc(100% - 43px) 100%, calc(100% - 48px) calc(100% - 5px), 48px calc(100% - 5px), 43px 100%, 15px 100%, 
+        0 calc(100% - 15px), 0 15px
+    );
+    z-index: 1;
+    /* Subtle tech grid texture */
+    background-image: 
+        linear-gradient(rgba(58, 214, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(58, 214, 255, 0.05) 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+
+.holographic-content-wrapper {
+    position: relative;
+    z-index: 2;
+    color: var(--sys-text);
+    font-family: var(--sys-font);
+    font-size: 14px;
+    line-height: 1.4;
+    padding: 2px;
+}
+
+/* Header */
+.hunter-hud-header {
+    padding: 16px 16px 8px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: grab;
+    position: relative;
+    gap: 12px;
+}
+
+.hunter-hud-header-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, rgba(58,214,255,0.8) 50%, transparent 100%);
+    box-shadow: 0 0 8px var(--sys-accent);
+    opacity: 0.7;
+}
+
+.hunter-hud-title {
+    font-weight: bold;
+    color: var(--sys-accent);
+    text-shadow: 0 0 5px var(--sys-glow);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-size: 12px;
+}
+
+.hunter-hud-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.hunter-hud-toggle {
+    cursor: pointer;
+    font-size: 16px;
+    color: var(--sys-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    transition: all 0.2s;
+}
+
+.hunter-hud-toggle:hover {
+    color: #fff;
+    text-shadow: 0 0 8px var(--sys-accent);
+}
+
+.hunter-hud-content {
+    padding: 16px 20px 24px 20px;
+    max-height: 75vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.collapsed .hunter-hud-content {
+    display: none;
+}
+
+/* System Titles */
+.system-panel-title {
+    color: var(--sys-accent);
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+    text-shadow: 0 0 8px var(--sys-glow);
+    position: sticky;
+    top: -16px;
+    background: rgba(5, 10, 20, 0.95);
+    padding-top: 16px;
+    padding-bottom: 8px;
+    z-index: 10;
+    border-bottom: 1px solid rgba(58, 214, 255, 0.15);
+}
+
+/* Online Badge */
+.system-online-badge {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 6px 12px;
+    background: rgba(5, 10, 20, 0.85);
+    border: 1px solid var(--sys-accent);
+    color: var(--sys-accent);
+    font-family: var(--sys-font);
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    box-shadow: 0 0 10px var(--sys-glow);
+    cursor: pointer;
+    z-index: 999998; /* Just below the panel */
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s;
+    animation: badge-pulse 3s infinite ease-in-out;
+}
+.system-online-badge::before {
+    content: '';
+    display: block;
+    width: 6px;
+    height: 6px;
+    background-color: var(--sys-accent);
+    box-shadow: 0 0 8px var(--sys-accent);
+    animation: pulse 2s infinite;
+}
+
+/* Milestone System Windows */
+.hunter-system-window {
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    padding: 24px;
+    text-align: center;
+    z-index: 9999999;
+}
+.hunter-system-window .hunter-window-title {
+    color: #facc15;
+    font-size: 20px;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+    text-shadow: 0 0 12px rgba(250, 204, 21, 0.6);
+}
+
+/* Animations */
+.animate-materialize {
+    animation: materialize-container 0.1s forwards;
+}
+
+/* 1. Frame draws itself */
+.animate-materialize .geometric-frame-container {
+    opacity: 0;
+    animation: frame-draw 0.3s ease-out 0.1s forwards;
+}
+
+/* 2. Glass fills */
+.animate-materialize .holographic-glass {
+    opacity: 0;
+    animation: glass-fill 0.4s ease-out 0.4s forwards;
+}
+
+/* 3. Content fades in */
+.animate-materialize .holographic-content-wrapper > * {
+    opacity: 0;
+    filter: blur(4px);
+    animation: content-reveal 0.3s ease-out 0.6s forwards;
+}
+
+@keyframes materialize-container {
+    0% { transform: scale(0.98); }
+    100% { transform: scale(1); }
+}
+
+@keyframes frame-draw {
+    0% { opacity: 0; filter: blur(4px) drop-shadow(0 0 0px var(--sys-glow)); transform: scale(0.98); }
+    100% { opacity: 1; filter: blur(0) drop-shadow(0 0 10px var(--sys-glow)); transform: scale(1); }
+}
+
+@keyframes glass-fill {
+    0% { opacity: 0; background: rgba(2,5,12,0); }
+    100% { opacity: 1; background: rgba(2,5,12,0.9); }
+}
+
+@keyframes content-reveal {
+    0% { opacity: 0; filter: blur(4px); transform: translateY(10px); }
+    100% { opacity: 1; filter: blur(0); transform: translateY(0); }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+@keyframes badge-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.fade-out {
+    opacity: 0;
+    transition: opacity 0.5s ease-out;
+}
+
+/* Idle Glitch Effect */
+.glitch-active {
+    animation: chromatic-glitch 0.2s linear infinite;
+}
+
+@keyframes chromatic-glitch {
+    0% {
+        transform: translate(0);
+        filter: drop-shadow(2px 0 var(--sys-red)) drop-shadow(-2px 0 var(--sys-accent));
+    }
+    20% {
+        transform: translate(-2px, 1px) skewX(2deg);
+        filter: drop-shadow(-3px 0 var(--sys-red)) drop-shadow(3px 0 var(--sys-accent));
+    }
+    40% {
+        transform: translate(2px, -1px) skewX(-2deg);
+        filter: drop-shadow(3px 0 var(--sys-red)) drop-shadow(-3px 0 var(--sys-accent));
+    }
+    60% {
+        transform: translate(-1px, 2px) skewX(1deg);
+        filter: drop-shadow(-2px 0 var(--sys-red)) drop-shadow(2px 0 var(--sys-accent));
+    }
+    80% {
+        transform: translate(1px, -2px) skewX(-1deg);
+        filter: drop-shadow(2px 0 var(--sys-red)) drop-shadow(-2px 0 var(--sys-accent));
+    }
+    100% {
+        transform: translate(0);
+        filter: none;
+    }
+}
+
+/* Scanline Sweep */
+.scanline-sweep {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: rgba(58, 214, 255, 0.8);
+    box-shadow: 0 0 15px var(--sys-accent);
+    animation: scan-sweep 0.8s ease-in-out forwards;
+    z-index: 999;
+    pointer-events: none;
+}
+
+@keyframes scan-sweep {
+    0% { top: 0; opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { top: 100%; opacity: 0; }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    background: rgba(58, 214, 255, 0.05);
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(58, 214, 255, 0.3);
+}
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(58, 214, 255, 0.6);
+}
+/* Added utility classes for V3.0 narrative UI */
+
+.section-label {
+    color: var(--sys-text-muted);
+    font-size: 10px;
+    margin-bottom: 12px;
+    margin-top: 16px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding-bottom: 4px;
+    position: relative;
+}
+.section-label::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(58,214,255,0.5) 0%, transparent 100%);
+}
+
+.stat-row {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 8px;
+    margin-bottom: 6px;
+    align-items: center;
+}
+
+.stat-row-label {
+    color: var(--sys-text-muted);
+}
+
+.stat-row-value {
+    color: var(--sys-text);
+}
+
+.status-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background-color: var(--sys-accent);
+    box-shadow: 0 0 8px var(--sys-accent);
+    border-radius: 50%;
+    margin-left: 8px;
+    animation: pulse 2s infinite;
+}
+
+.build-stamp {
+    position: absolute;
+    bottom: 8px;
+    right: 12px;
+    font-size: 9px;
+    color: rgba(138, 143, 152, 0.3);
+    letter-spacing: 1px;
+    pointer-events: none;
+}
+
+/* Typography Hierarchy */
+.sys-text-largest {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--sys-text);
+    letter-spacing: 2px;
+}
+.sys-text-large {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--sys-text);
+}
+.sys-text-medium {
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--sys-text);
+}
+.sys-text-small {
+    font-size: 11px;
+    color: var(--sys-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.6;
+}
+
+/* Holographic Mana Bar */
+.mana-bar-container {
+    width: 100%;
+    height: 16px;
+    background: rgba(58, 214, 255, 0.1);
+    border: 1px solid rgba(58, 214, 255, 0.3);
+    position: relative;
+    overflow: hidden;
+    box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.8);
+    clip-path: polygon(4px 0, 100% 0, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%, 0 4px);
+}
+.mana-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, rgba(58,214,255,0.6) 0%, rgba(58,214,255,0.9) 50%, rgba(58,214,255,0.6) 100%);
+    background-size: 200% 100%;
+    animation: energy-flow 2s linear infinite;
+    box-shadow: 0 0 10px var(--sys-accent);
+    position: relative;
+    transition: width 1s ease-out;
+}
+.mana-bar-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 2px;
+    height: 100%;
+    background: #fff;
+    box-shadow: 0 0 15px #fff;
+}
+
+.mana-bar-peak-marker {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 10px var(--sys-accent);
+    z-index: 2;
+}
+.mana-bar-peak-marker::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -3px;
+    width: 0; 
+    height: 0; 
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 4px solid #fff;
+}
+.mana-bar-peak-marker::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: -3px;
+    width: 0; 
+    height: 0; 
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-bottom: 4px solid #fff;
+}
+
+/* Promotion Progress Bar */
+.promotion-bar-container {
+    width: 100%;
+    height: 4px;
+    background: rgba(138, 143, 152, 0.2);
+    position: relative;
+}
+.promotion-bar-fill {
+    height: 100%;
+    background: var(--sys-accent);
+    box-shadow: 0 0 8px var(--sys-glow);
+    transition: width 1s ease-out;
+}
+
+/* Continuous Subtle Scanline overlay */
+.holographic-glass::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 20px;
+    background: linear-gradient(to bottom, transparent, rgba(58, 214, 255, 0.05), transparent);
+    animation: continuous-scan 6s linear infinite;
+    pointer-events: none;
+    z-index: 10;
+}
+
+@keyframes continuous-scan {
+    0% { transform: translateY(-20px); }
+    100% { transform: translateY(800px); }
+}
