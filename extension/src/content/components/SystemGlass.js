@@ -12,16 +12,14 @@ export class SystemGlass {
             <style>
                 ${systemTokens}
                 :host {
-                    display: block;
-                    width: 100%;
-                    height: 100%;
-                    position: absolute;
-                    top: 0;
-                    left: 0;
+                    display: flex;
+                    flex-direction: column;
                     background: var(--sys-glass-bg);
+                    backdrop-filter: var(--sys-blur);
+                    -webkit-backdrop-filter: var(--sys-blur);
                     z-index: 1;
                     border: var(--sys-border-inner) solid var(--sys-glass-border);
-                    box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.9);
+                    box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.5);
                     opacity: 0;
                     animation: glass-appear 0.5s ease-out 0.2s forwards;
                     overflow: hidden;
@@ -30,7 +28,7 @@ export class SystemGlass {
                 .gradient-overlay {
                     position: absolute;
                     top: 0; left: 0; right: 0; bottom: 0;
-                    background: linear-gradient(180deg, rgba(6,15,28,0.2) 0%, rgba(6,15,28,0.95) 100%);
+                    background: linear-gradient(180deg, rgba(6,15,28,0.1) 0%, rgba(6,15,28,0.6) 100%);
                     pointer-events: none;
                     z-index: 1;
                 }
@@ -53,11 +51,11 @@ export class SystemGlass {
                     position: relative;
                     z-index: 2;
                     width: 100%;
-                    height: 100%;
-                    padding: 24px;
+                    padding: 16px 24px;
                     display: flex;
                     flex-direction: column;
                     overflow-y: auto;
+                    box-sizing: border-box;
                     overflow-x: hidden;
                     transition: filter 0.2s;
                 }

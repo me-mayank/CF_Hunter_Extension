@@ -47,13 +47,63 @@ export class GateAnalysis {
     render() {
         if (!this._contest || !this._analysis) return;
 
+        const analysis = this._analysis;
+
+        if (analysis.classification === "Unknown Gate") {
+            this.shadowRoot.innerHTML = `
+                <style>
+                    ${systemTokens}
+                    ${typography}
+                    .unknown-container {
+                        padding: 24px;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 12px;
+                        font-family: var(--sys-font-primary);
+                        color: var(--sys-text-muted);
+                        font-size: 14px;
+                    }
+                    .typewriter {
+                        overflow: hidden;
+                        white-space: nowrap;
+                        letter-spacing: 1px;
+                        border-right: 2px solid transparent;
+                    }
+                    .line1 { width: 0; animation: typing 1s steps(30, end) forwards; color: var(--sys-color-danger); font-weight: bold; }
+                    .line2 { width: 0; animation: typing 1s steps(30, end) 1s forwards; }
+                    .line3 { width: 0; animation: typing 1s steps(30, end) 2s forwards; }
+                    .line4 { width: 0; animation: typing 1.5s steps(40, end) 3s forwards; border-right: 2px solid var(--sys-frame-primary); animation: typing 1.5s steps(40, end) 3s forwards, blink-caret .75s step-end infinite 4.5s; }
+                    
+                    @keyframes typing {
+                        from { width: 0 }
+                        to { width: 100% }
+                    }
+                    @keyframes blink-caret {
+                        from, to { border-color: transparent }
+                        50% { border-color: var(--sys-frame-primary); }
+                    }
+                </style>
+                <div id="header-container"></div>
+                <div class="unknown-container">
+                    <div class="typewriter line1">[SYSTEM ALERT] Unknown Gate</div>
+                    <div class="typewriter line2">Scanning environment...</div>
+                    <div class="typewriter line3">Difficulty fluctuating...</div>
+                    <div class="typewriter line4">Awaiting monster signatures...</div>
+                </div>
+            `;
+            const header = new SystemHeader('GATE ANALYSIS');
+            this.shadowRoot.getElementById('header-container').appendChild(header.element);
+            return;
+        }
+
         const getShortVerdict = (verdict) => {
+            if (!verdict) return 'Scanning Status...';
             if (verdict.includes('closed')) return 'Gate Closed. No Entry.';
             if (verdict.includes('vastly exceeds')) return 'Proceed. Survival Probability: High.';
             if (verdict.includes('meets recommended')) return 'Proceed. Survival Probability: Moderate.';
             return 'High Risk. Survival Probability: Low.';
         };
-        const shortRec = getShortVerdict(analysis.systemVerdict);
+        const shortRec = getShortVerdict(analysis.systemVerdict || "");
 
         this.shadowRoot.innerHTML = `
             <style>
@@ -128,7 +178,7 @@ export class GateAnalysis {
             <div class="status-container">
                 <div class="stat-row anim-seq delay-3">
                     <div class="sys-label">Gate Rank</div>
-                    <div class="sys-value" style="color: rgba(255, 207, 107, 1); text-shadow: 0 0 5px rgba(250,204,21,0.5);">${analysis.classification.toUpperCase()}</div>
+                    <div class="sys-value" style="color: ${analysis.classificationObj.color}; text-shadow: 0 0 5px ${analysis.classificationObj.glow};">${analysis.classification.toUpperCase()}</div>
                 </div>
                 <div class="stat-row anim-seq delay-3">
                     <div class="sys-label">Contest Status</div>

@@ -79,7 +79,6 @@ export function initHUD(pageType) {
     content.id = 'hunter-hud-content';
     content.style.position = 'relative';
     content.style.zIndex = '10';
-    content.style.flex = '1';
     content.style.display = 'flex';
     content.style.flexDirection = 'column';
     content.style.width = '100%';

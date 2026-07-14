@@ -9,8 +9,8 @@ export const systemTokens = `
         --sys-glass-border: #69D6FF;
         
         /* Glass Material */
-        --sys-glass-bg: #060f1c; /* Opaque to prevent backdrop-filter stacking context bugs */
-        --sys-blur: blur(20px);
+        --sys-glass-bg: rgba(14, 34, 59, 0.65);
+        --sys-blur: blur(8px);
         
         /* Line Weights */
         --sys-border-primary: 2px;

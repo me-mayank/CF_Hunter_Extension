@@ -2,7 +2,8 @@ import { classifyGate } from './gateClassification.js';
 
 export function analyzeGate(contestInfo, hunterProfile) {
     const { name, status, startTimeSeconds } = contestInfo;
-    const classification = classifyGate(name);
+    const classificationObj = classifyGate(name);
+    const classification = classificationObj.label;
 
     let gateStatus = status; // e.g. "BEFORE", "CODING", "FINISHED"
     let timeUntilOpen = null;

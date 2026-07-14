@@ -20,9 +20,9 @@ export class SystemHeader {
                     justify-content: space-between;
                     align-items: center;
                     width: 100%;
-                    padding-bottom: 12px;
+                    padding-bottom: 8px;
                     border-bottom: var(--sys-border-inner) solid var(--sys-frame-secondary);
-                    margin-bottom: 24px;
+                    margin-bottom: 16px;
                     position: relative;
                 }
 

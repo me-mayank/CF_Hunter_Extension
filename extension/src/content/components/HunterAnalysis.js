@@ -1,14 +1,16 @@
 import { systemTokens, typography } from './sharedStyles.js';
+import { SKILL_COLORS, STAT_ICONS, HUNTER_TYPE_BY_SKILL, getMonsterName, getHunterRecommendation, getCombatantFraming } from '../../shared/constants.js';
 import { translateRank, formatNumber, LABELS, getHunterSystemSentence } from '../../shared/terminology.js';
-import { STAT_ICONS, HUNTER_TYPE_BY_SKILL, getMonsterName, getHunterRecommendation, getCombatantFraming } from '../../shared/constants.js';
 
 import { SystemHeader } from './SystemHeader.js';
+import { renderManaGauge } from './ManaGauge.js';
 
 export class HunterAnalysis {
     constructor() {
         this.element = document.createElement('div');
         this.element.style.width = '100%';
-        this.element.style.height = '100%';
+        this.element.style.display = 'flex';
+        this.element.style.flexDirection = 'column';
         this.shadowRoot = this.element.attachShadow({ mode: 'open' });
         this._profile = null;
         this._profile = null;
@@ -94,7 +96,7 @@ export class HunterAnalysis {
         
         // --- Shared Header ---
         const headerHtml = `
-            <div class="anim-seq delay-2" style="display: flex; gap: 12px; align-items: center; margin-bottom: 16px;">
+            <div class="anim-seq delay-2" style="display: flex; gap: 12px; align-items: center; margin-bottom: 16px; justify-content: center;">
                 <img class="avatar" src="${avatarUrl}" alt="${profile.handle}" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 72 72%22><rect width=%2272%22 height=%2272%22 fill=%22%230f172a%22/><path d=%22M36 20C29.373 20 24 25.373 24 32C24 38.627 29.373 44 36 44C42.627 44 48 38.627 48 32C48 25.373 42.627 20 36 20ZM36 48C24.954 48 16 56.954 16 68H56C56 56.954 47.046 48 36 48Z%22 fill=%22%23334155%22/></svg>';">
                 <div style="display: flex; flex-direction: column;">
                     <div class="hunter-name" style="color: var(--sys-frame-primary); font-size: 20px; text-shadow: none;">${(profile.displayName || profile.handle).toUpperCase()}</div>
@@ -104,107 +106,49 @@ export class HunterAnalysis {
             </div>
         `;
 
-        // --- Column Left: Combat Metrics ---
-        let leftColHtml = `
-            <div class="sys-label" style="font-size: 11px;">COMBAT METRICS</div>
-            <div class="stat-row">
-                <div class="sys-label" style="font-size: 10px;">${LABELS.HUNTER_LEVEL}</div>
-                <div class="sys-value" style="color: var(--sys-color-level); font-size: 13px;">Lv. <span class="anim-num" data-target-num="${profile.hunterLevel}">0</span></div>
-            </div>
-            <div class="stat-row">
-                <div class="sys-label" style="font-size: 10px;">${LABELS.MANA_POWER}</div>
-                <div class="sys-value" style="color: var(--sys-color-mana); font-size: 13px;"><span class="anim-num" data-target-num="${targetMana}">0</span> MP</div>
-            </div>
-        `;
 
-        if (isComparison) {
-            const manaDiff = targetMana - viewerMana;
-            const targetWidth = Math.min(100, Math.max(0, 50 + (manaDiff / (viewerMana || 1)) * 50));
-            leftColHtml += `
-                <div class="sys-instrument-bar-container" style="margin-top: 2px;">
-                    <div class="sys-instrument-bar-fill" style="width: 0%; background: var(--sys-frame-primary); box-shadow: 0 0 8px var(--sys-frame-primary);" data-target-width="${targetWidth}"></div>
-                    <div class="sys-instrument-bar-ticks"></div>
+        // --- Stats Row ---
+        // Right-aligned values for tension and width utilization
+        let statsHtml = `
+            <div class="anim-seq delay-3" style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; width: 100%;">
+                <div style="display: flex; flex-direction: column; gap: 2px;">
+                    <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                        <div class="sys-label" style="font-size: 11px;">HUNTER LEVEL</div>
+                        <div class="sys-value" style="color: var(--sys-color-level); font-size: 14px;">${profile.hunterLevel || 0}</div>
+                    </div>
+                    <div class="sys-label" style="font-size: 8px; margin-top: 4px; color: var(--sys-text-muted);">RANK PROGRESS</div>
+                    <div style="display: flex; align-items: center; gap: 6px; margin-top: 2px;">
+                        <div style="flex: 1; height: 2px; background: rgba(255,255,255,0.1); position: relative;">
+                            <div style="position: absolute; top: 0; left: 0; height: 100%; width: ${progressPercent}%; background: ${rankTier.color}; box-shadow: 0 0 6px ${rankTier.color};"></div>
+                        </div>
+                        <div class="sys-label" style="font-size: 8px; color: ${rankTier.color}; margin: 0;">${progressPercent.toFixed(1)}%</div>
+                    </div>
                 </div>
-            `;
-        } else {
-            leftColHtml += `
-                <div class="sys-instrument-bar-container" style="margin-top: 2px;">
-                    <div class="sys-instrument-bar-fill" style="width: 0%; background: var(--sys-color-mana); box-shadow: 0 0 8px var(--sys-color-mana);" data-target-width="${manaPercent}"></div>
-                    <div style="position: absolute; right: 0; top: 0; bottom: 0; width: 2px; background: var(--sys-color-mana); box-shadow: 0 0 8px var(--sys-color-mana);"></div>
+                <div style="display: flex; justify-content: space-between; align-items: baseline; margin-top: 4px;">
+                    <div class="sys-label" style="font-size: 11px;">MONSTERS DEFEATED</div>
+                    <div class="sys-value" style="color: var(--sys-text); font-size: 13px;">${formatNumber(profile.problemsDefeated || 0)}</div>
                 </div>
-            `;
-        }
-        
-        let leftColWrapper = `<div style="display: flex; flex-direction: column; gap: 6px;">${leftColHtml}</div>`;
-
-        // --- Column Right: Combat Record ---
-        let rightColWrapper = `
-            <div style="display: flex; flex-direction: column; gap: 6px;">
-                <div class="sys-label" style="font-size: 11px;">COMBAT RECORD</div>
-                <div class="stat-row">
-                    <div class="sys-label" style="font-size: 9px;">${LABELS.MONSTERS_DEFEATED}</div>
-                    <div class="sys-value" style="font-size: 13px;"><span class="anim-num" data-target-num="${profile.problemsDefeated}">0</span></div>
+                <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                    <div class="sys-label" style="font-size: 11px;">DUNGEONS CLEARED</div>
+                    <div class="sys-value" style="color: var(--sys-text); font-size: 13px;">${formatNumber(profile.contestsParticipated || 0)}</div>
                 </div>
-                <div class="stat-row">
-                    <div class="sys-label" style="font-size: 9px;">${LABELS.DUNGEONS_CLEARED}</div>
-                    <div class="sys-value" style="font-size: 13px;"><span class="anim-num" data-target-num="${profile.contestsParticipated}">0</span></div>
-                </div>
-                <div class="stat-row">
-                    <div class="sys-label" style="font-size: 9px;">${LABELS.PEAK_MONSTER}</div>
-                    <div class="sys-value" style="color: var(--sys-color-danger); font-size: 11px; font-family: var(--sys-font-secondary);">${peakMonsterName}</div>
+                <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                    <div class="sys-label" style="font-size: 11px;">PEAK MONSTER</div>
+                    <div class="sys-value" style="color: var(--sys-text); font-size: 13px;">${peakMonsterName}</div>
                 </div>
             </div>
         `;
 
-        // --- Third Row: Threat Assessment & Rank Progress ---
-        let thirdRowHtml = '';
-        if (isComparison) {
-            const framing = getCombatantFraming(viewerMana, targetMana);
-            thirdRowHtml = `
-                <div class="anim-seq delay-5" style="display: grid; grid-template-columns: 1fr 1px 1fr; gap: 10px; margin-bottom: 8px;">
-                    <div style="display: flex; flex-direction: column; gap: 4px;">
-                        <div class="sys-label" style="font-size: 10px;">THREAT ASSESSMENT</div>
-                        <div class="sys-value" style="color: ${framing.color}; font-size: 14px; font-family: var(--sys-font-secondary);">${framing.label}</div>
-                    </div>
-                    <div style="background: rgba(255,255,255,0.1);"></div>
-                    <div style="display: flex; flex-direction: column; gap: 4px; justify-content: center;">
-                        <div class="sys-label" style="font-size: 9px;">RANK PROGRESS</div>
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <div class="sys-instrument-bar-container" style="margin: 0; flex: 1;">
-                                <div class="sys-instrument-bar-fill" style="width: 0%; background: ${rankTier.color}; box-shadow: 0 0 8px ${rankTier.glow};" data-target-width="${progressPercent}"></div>
-                                <div class="sys-instrument-bar-ticks"></div>
-                            </div>
-                            <div class="sys-label" style="font-size: 9px; color: ${rankTier.color};">${progressPercent.toFixed(1)}%</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="anim-seq delay-6" style="height: 1px; background: rgba(255,255,255,0.1); margin-bottom: 8px;"></div>
-            `;
-        } else {
-            thirdRowHtml = `
-                <div class="anim-seq delay-5" style="display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px;">
-                    <div class="sys-label" style="font-size: 10px;">RANK PROGRESS</div>
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <div class="sys-instrument-bar-container" style="margin: 0; flex: 1;">
-                            <div class="sys-instrument-bar-fill" style="width: 0%; background: ${rankTier.color}; box-shadow: 0 0 8px ${rankTier.glow};" data-target-width="${progressPercent}"></div>
-                            <div class="sys-instrument-bar-ticks"></div>
-                        </div>
-                        <div class="sys-label" style="font-size: 10px; color: ${rankTier.color};">${progressPercent.toFixed(1)}%</div>
-                    </div>
-                </div>
-                <div class="anim-seq delay-6" style="height: 1px; background: rgba(255,255,255,0.1); margin-bottom: 8px;"></div>
-            `;
-        }
+        const dominantLower = dominantSkill.toLowerCase();
+        const primaryColor = SKILL_COLORS[dominantLower] || 'var(--sys-frame-primary)';
 
-        // --- Bottom Row: Primary Affinity / System Recommendation ---
         let bottomRowHtml = `
-            <div style="display: flex; flex-direction: column; gap: 6px;">
+            <div class="anim-seq delay-5" style="display: flex; justify-content: space-between; align-items: baseline; width: 100%; margin-bottom: 12px;">
                 <div class="sys-label" style="font-size: 11px;">PRIMARY AFFINITY</div>
-                <div class="sys-value" style="color: var(--sys-frame-primary); font-size: 13px;">${dominantSkill.toUpperCase()}</div>
+                <div class="sys-value" style="color: ${primaryColor}; font-size: 13px;">${dominantSkill.toUpperCase()}</div>
             </div>
         `;
-        let bottomDivider = '';
-        let bottomRightCol = '';
+        let comparisonHtml = '';
 
         if (isComparison) {
             const recLabel = getHunterRecommendation(viewerMana, targetMana);
@@ -214,11 +158,20 @@ export class HunterAnalysis {
             else if (recLabel.includes('Comparable')) recColor = "var(--sys-color-mana)";
             else if (recLabel.includes('Below')) recColor = "var(--sys-color-level)";
 
-            bottomDivider = `<div style="background: rgba(255,255,255,0.1);"></div>`;
-            bottomRightCol = `
-                <div style="display: flex; flex-direction: column; gap: 6px;">
-                    <div class="sys-label" style="font-size: 11px;">SYSTEM RECOMMENDATION</div>
-                    <div class="sys-value" style="color: ${recColor}; font-size: 14px;">${recLabel.toUpperCase()}</div>
+            const threatData = getCombatantFraming(viewerMana, targetMana);
+            const threatColor = threatData.color;
+            const threatLabel = threatData.label;
+
+            comparisonHtml = `
+                <div class="anim-seq delay-6" style="display: flex; flex-direction: column; align-items: center; margin-top: 16px; gap: 8px;">
+                    <div style="text-align: center;">
+                        <div class="sys-label" style="font-size: 11px;">THREAT ASSESSMENT</div>
+                        <div class="sys-value" style="color: ${threatColor}; font-size: 15px; margin-top: 2px;">${threatLabel.toUpperCase()}</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div class="sys-label" style="font-size: 11px;">SYSTEM RECOMMENDATION</div>
+                        <div class="sys-value" style="color: ${recColor}; font-size: 15px; margin-top: 2px;">${recLabel.toUpperCase()}</div>
+                    </div>
                 </div>
             `;
         }
@@ -226,21 +179,13 @@ export class HunterAnalysis {
         const bodyHtml = `
             ${headerHtml}
             
-            <div class="anim-seq delay-3" style="display: grid; grid-template-columns: 1fr 1px 1fr; gap: 10px; margin-bottom: 8px;">
-                ${leftColWrapper}
-                <div style="background: rgba(255,255,255,0.1);"></div>
-                ${rightColWrapper}
-            </div>
+            ${renderManaGauge(targetMana, profile.peakManaPower || profile.manaPower || 0, 'var(--sys-color-mana)', true)}
+            
+            ${statsHtml}
+            
+            ${bottomRowHtml}
 
-            <div class="anim-seq delay-4" style="height: 1px; background: rgba(255,255,255,0.1); margin-bottom: 8px;"></div>
-
-            ${thirdRowHtml}
-
-            <div class="anim-seq delay-6" style="display: grid; grid-template-columns: 1fr 1px 1fr; gap: 10px;">
-                ${bottomRowHtml}
-                ${bottomDivider}
-                ${bottomRightCol}
-            </div>
+            ${isComparison ? `<div class="anim-seq delay-6" style="height: 1px; background: rgba(255,255,255,0.1); margin: 8px 0; width: 100%;"></div>${comparisonHtml}` : ''}
         `;
 
         this.shadowRoot.innerHTML = `
@@ -248,7 +193,6 @@ export class HunterAnalysis {
                 ${systemTokens}
                 ${typography}
                 :host {
-                    flex: 1;
                     display: flex;
                     flex-direction: column;
                     width: 100%;

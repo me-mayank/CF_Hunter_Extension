@@ -16,8 +16,7 @@ export class SystemFrame {
                     display: block;
                     position: relative;
                     width: 100%;
-                    max-width: 600px; /* Aspect ratio roughly 1.4:1 */
-                    aspect-ratio: var(--sys-aspect-ratio, 1.4);
+                    max-width: 600px;
                     font-family: var(--sys-font-primary);
                     color: var(--sys-text);
                     z-index: 9999;
@@ -44,8 +43,13 @@ export class SystemFrame {
                 .frame-wrapper {
                     position: relative;
                     width: 100%;
-                    height: 100%;
-                    padding: 8px; /* Room for the frame to overflow the glass */
+                    display: flex;
+                    flex-direction: column;
+                }
+                
+                #glass-container {
+                    display: flex;
+                    flex-direction: column;
                 }
 
                 /* Construct Layers */
@@ -180,11 +184,9 @@ export class SystemFrame {
         this.contentContainer = document.createElement('div');
         this.contentContainer.style.position = 'relative';
         this.contentContainer.style.zIndex = '3';
-        this.contentContainer.style.flex = '1';
         this.contentContainer.style.display = 'flex';
         this.contentContainer.style.flexDirection = 'column';
         this.contentContainer.style.width = '100%';
-        this.contentContainer.style.height = '100%';
         this.contentContainer.style.overflowY = 'auto';
         this.contentContainer.style.overflowX = 'hidden';
         this.contentContainer.style.paddingBottom = '32px';

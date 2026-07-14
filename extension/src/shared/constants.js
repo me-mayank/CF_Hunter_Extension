@@ -19,12 +19,12 @@ export const UNCLASSIFIED_THREAT = { label: "Unclassified", color: "#6b7f99", gl
 
 export function getRecommendedStrategy(threatLabel) {
     switch(threatLabel) {
-        case "Safe Zone": return "Threat level negligible. Optimal for routine training.";
-        case "Low Threat": return "Threat manageable. Standard tactics apply.";
-        case "Equal Threat": return "Balanced encounter. Opportunity for skill growth.";
-        case "Dangerous": return "Monster exceeds your strength. Prepare thoroughly.";
-        case "Very Dangerous": return "Severe risk of failure. Caution highly advised.";
-        case "Catastrophic": return "Retreat advised. This threat far exceeds your rank.";
+        case "Safe Zone": return "This Monster poses no threat. Engage without hesitation.";
+        case "Low Threat": return "Victory is highly probable. Proceed.";
+        case "Equal Threat": return "An even match has been detected. Your skills will be tested.";
+        case "Dangerous": return "This Monster exceeds your current strength. Caution advised.";
+        case "Very Dangerous": return "Extreme risk detected. Retreat or prepare thoroughly before engaging.";
+        case "Catastrophic": return "This encounter is not survivable at your current rank. Retreat immediately.";
         default: return "Threat unquantifiable. Proceed at your own risk.";
     }
 }
@@ -91,22 +91,6 @@ export const THREAT_XP_REWARDS = {
     CATASTROPHIC: { xp: 500, penalty: -50 }
 };
 
-// Gate Classification Mapping
-export const GATE_CLASSIFICATIONS = {
-    "div. 4": "E-Rank Gate",
-    "div. 3": "D-Rank Gate",
-    "div. 2": "C-Rank Gate",
-    "div. 1 + div. 2": "B-Rank Gate (National Gate)",
-    "global round": "B-Rank Gate (National Gate)",
-    "div. 1": "A-Rank Gate",
-    "educational": "Training Gate",
-    "gym": "Simulation Gate",
-    "testing round": "Simulation Gate",
-    "icpc": "S-Rank Gate (World-Class Gate)",
-    "regional": "S-Rank Gate (World-Class Gate)",
-    "finals": "S-Rank Gate (World-Class Gate)",
-    "kotlin heroes": "Special Gate"
-};
 
 // Hunter Rank Tier Mapping & Colors (Rating driven)
 export const HUNTER_RANKS = [
@@ -121,6 +105,35 @@ export const HUNTER_RANKS = [
     { label: "Monarch", color: "#ff2f6e", glow: "rgba(255, 47, 110, 0.4)", minRating: 2600, maxRating: 2999, nextRankRating: 3000 },
     { label: "Shadow Monarch", color: "#ffcf6b", glow: "rgba(255, 207, 107, 0.8)", minRating: 3000, maxRating: Infinity, nextRankRating: null }
 ];
+
+// Gate Classification Mapping
+export const GATE_CLASSIFICATIONS = [
+    { pattern: "educational", label: "Training Gate", color: "#3ea6ff", glow: "rgba(62, 166, 255, 0.4)" },
+    { pattern: "global round", label: "National Gate", color: "#ffcf6b", glow: "rgba(255, 207, 107, 0.4)" },
+    { pattern: "gym", label: "Simulation Gate", color: "#4be38a", glow: "rgba(75, 227, 138, 0.4)" },
+    { pattern: "testing round", label: "Simulation Gate", color: "#4be38a", glow: "rgba(75, 227, 138, 0.4)" },
+    { pattern: "icpc", label: "S-Rank Gate (World-Class Gate)", color: HUNTER_RANKS[5].color, glow: HUNTER_RANKS[5].glow },
+    { pattern: "regional", label: "S-Rank Gate (World-Class Gate)", color: HUNTER_RANKS[5].color, glow: HUNTER_RANKS[5].glow },
+    { pattern: "finals", label: "S-Rank Gate (World-Class Gate)", color: HUNTER_RANKS[5].color, glow: HUNTER_RANKS[5].glow },
+    { pattern: "kotlin heroes", label: "Special Gate", color: "#ffcf6b", glow: "rgba(255, 207, 107, 0.4)" },
+    { pattern: "div. 1 + div. 2", label: "A-Rank Gate", color: HUNTER_RANKS[4].color, glow: HUNTER_RANKS[4].glow },
+    { pattern: "div. 1 + 2", label: "A-Rank Gate", color: HUNTER_RANKS[4].color, glow: HUNTER_RANKS[4].glow },
+    { pattern: "div. 1", label: "S-Rank Gate", color: HUNTER_RANKS[5].color, glow: HUNTER_RANKS[5].glow },
+    { pattern: "div. 2", label: "B-Rank Gate", color: HUNTER_RANKS[3].color, glow: HUNTER_RANKS[3].glow },
+    { pattern: "div. 3", label: "C-Rank Gate", color: HUNTER_RANKS[2].color, glow: HUNTER_RANKS[2].glow },
+    { pattern: "div. 4", label: "E-Rank Gate", color: HUNTER_RANKS[0].color, glow: HUNTER_RANKS[0].glow }
+];
+
+
+export const SKILL_COLORS = {
+    "strength": "#ff5e5e",
+    "agility": "#4be38a",
+    "intelligence": "#3ea6ff",
+    "perception": "#38e1ff",
+    "magic": "#8a6bff",
+    "strategy": "#ffcf6b",
+    "insight": "#ff2f6e"
+};
 
 // Monster Naming Table
 export const MONSTER_CLASSES = [

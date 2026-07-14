@@ -15,7 +15,8 @@ export const LABELS = {
     DUNGEONS_CLEARED: "DUNGEONS CLEARED",
     PEAK_MONSTER: "PEAK MONSTER",
     HUNTER_LEVEL: "HUNTER LEVEL",
-    MANA_POWER: "MANA POWER"
+    MANA_POWER: "MANA POWER",
+    SKILLS_REQUIRED: "SKILLS REQUIRED"
 };
 
 export function getMonsterSystemSentence(threatLabel, monsterClass) {
