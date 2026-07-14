@@ -273,23 +273,23 @@
 @keyframes chromatic-glitch {
     0% {
         transform: translate(0);
-        filter: drop-shadow(2px 0 var(--sys-red)) drop-shadow(-2px 0 var(--sys-accent));
+        filter: drop-shadow(2.5px 0 var(--sys-red)) drop-shadow(-2.5px 0 var(--sys-accent));
     }
     20% {
-        transform: translate(-2px, 1px) skewX(2deg);
-        filter: drop-shadow(-3px 0 var(--sys-red)) drop-shadow(3px 0 var(--sys-accent));
+        transform: translate(-2.5px, 1.25px) skewX(2.5deg);
+        filter: drop-shadow(-3.75px 0 var(--sys-red)) drop-shadow(3.75px 0 var(--sys-accent));
     }
     40% {
-        transform: translate(2px, -1px) skewX(-2deg);
-        filter: drop-shadow(3px 0 var(--sys-red)) drop-shadow(-3px 0 var(--sys-accent));
+        transform: translate(2.5px, -1.25px) skewX(-2.5deg);
+        filter: drop-shadow(3.75px 0 var(--sys-red)) drop-shadow(-3.75px 0 var(--sys-accent));
     }
     60% {
-        transform: translate(-1px, 2px) skewX(1deg);
-        filter: drop-shadow(-2px 0 var(--sys-red)) drop-shadow(2px 0 var(--sys-accent));
+        transform: translate(-1.25px, 2.5px) skewX(1.25deg);
+        filter: drop-shadow(-2.5px 0 var(--sys-red)) drop-shadow(2.5px 0 var(--sys-accent));
     }
     80% {
-        transform: translate(1px, -2px) skewX(-1deg);
-        filter: drop-shadow(2px 0 var(--sys-red)) drop-shadow(-2px 0 var(--sys-accent));
+        transform: translate(1.25px, -2.5px) skewX(-1.25deg);
+        filter: drop-shadow(2.5px 0 var(--sys-red)) drop-shadow(-2.5px 0 var(--sys-accent));
     }
     100% {
         transform: translate(0);

@@ -118,12 +118,12 @@ export class HunterAnalysis {
                         <div class="sys-label" style="font-size: 14px;">HUNTER LEVEL</div>
                         <div class="sys-value" style="color: var(--sys-color-level); font-size: 18px;">Lv. ${profile.hunterLevel || 0}</div>
                     </div>
-                    <div class="sys-label" style="font-size: 10px; margin-top: 4px; color: var(--sys-text-muted);">RANK PROGRESS</div>
+                    <div class="sys-label" style="font-size: 11px; margin-top: 4px; color: var(--sys-text-muted);">RANK PROGRESS</div>
                     <div style="display: flex; align-items: center; gap: 8px; margin-top: 2px;">
-                        <div style="flex: 1; height: 3px; background: rgba(255,255,255,0.1); position: relative;">
+                        <div style="flex: 1; height: 4px; background: rgba(255,255,255,0.1); position: relative;">
                             <div style="position: absolute; top: 0; left: 0; height: 100%; width: ${progressPercent}%; background: ${rankTier.color}; box-shadow: 0 0 6px ${rankTier.color};"></div>
                         </div>
-                        <div class="sys-label" style="font-size: 10px; color: ${rankTier.color}; margin: 0;">${progressPercent.toFixed(1)}%</div>
+                        <div class="sys-label" style="font-size: 14px; color: ${rankTier.color}; margin: 0; font-weight: bold;">${progressPercent.toFixed(1)}%</div>
                     </div>
                 </div>
                 <div style="display: flex; justify-content: space-between; align-items: baseline; margin-top: 8px;">

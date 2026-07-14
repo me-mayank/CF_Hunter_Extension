@@ -24,36 +24,42 @@ export function initHUD(pageType) {
         }
         .system-badge-container {
             float: left;
-            margin-left: 15px;
+            margin-left: 20px;
             height: 3em;
             display: flex;
             align-items: center;
         }
         .system-online-badge {
             position: relative;
-            background: rgba(10, 20, 30, 0.8);
-            color: #38aaff;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 11px;
+            background: rgba(5, 10, 15, 0.9);
+            color: #00ffff;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 13px;
             cursor: pointer;
-            border-radius: 4px;
-            font-weight: bold;
-            height: 2.4em;
-            padding: 0 14px;
+            border-radius: 3px;
+            font-weight: normal;
+            height: 26px;
+            padding: 0 16px;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            box-shadow: 0 0 10px rgba(56, 170, 255, 0.2);
+            box-shadow: 0 0 12px rgba(0, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .system-online-badge:hover {
+            box-shadow: 0 0 18px rgba(0, 255, 255, 0.4);
+            transform: scale(1.02);
         }
         
         .system-online-badge::before {
             content: '';
             position: absolute;
-            width: 250%;
-            height: 250%;
-            background: conic-gradient(from 0deg, transparent 70%, #38aaff 100%);
-            animation: badge-rotate 2.5s linear infinite;
+            width: 300%;
+            height: 300%;
+            background: conic-gradient(from 0deg, transparent 75%, #00ffff 100%);
+            animation: badge-rotate 2s linear infinite;
             z-index: 0;
         }
 
@@ -61,16 +67,17 @@ export function initHUD(pageType) {
             content: '';
             position: absolute;
             inset: 1.5px;
-            background: rgba(10, 20, 30, 0.95);
-            border-radius: 2.5px;
+            background: rgba(5, 10, 15, 0.95);
+            border-radius: 2px;
             z-index: 1;
         }
 
         .system-online-badge > span {
             position: relative;
             z-index: 2;
-            letter-spacing: 0.5px;
-            text-shadow: 0 0 8px rgba(56, 170, 255, 0.6);
+            letter-spacing: 1.5px;
+            text-shadow: 0 0 6px rgba(0, 255, 255, 0.7);
+            margin-bottom: -1px; /* Visual centering for this font */
         }
 
         @keyframes badge-rotate {
@@ -82,6 +89,35 @@ export function initHUD(pageType) {
             top: 0; left: 0; right: 0; height: 30px;
             cursor: grab;
             z-index: 100;
+        }
+        .glitch-active {
+            animation: chromatic-glitch 0.2s linear infinite;
+        }
+        @keyframes chromatic-glitch {
+            0% {
+                transform: translate(0);
+                filter: drop-shadow(2.5px 0 #ff6666) drop-shadow(-2.5px 0 #00ffff);
+            }
+            20% {
+                transform: translate(-2.5px, 1.25px) skewX(2.5deg);
+                filter: drop-shadow(-3.75px 0 #ff6666) drop-shadow(3.75px 0 #00ffff);
+            }
+            40% {
+                transform: translate(2.5px, -1.25px) skewX(-2.5deg);
+                filter: drop-shadow(3.75px 0 #ff6666) drop-shadow(-3.75px 0 #00ffff);
+            }
+            60% {
+                transform: translate(-1.25px, 2.5px) skewX(1.25deg);
+                filter: drop-shadow(-2.5px 0 #ff6666) drop-shadow(2.5px 0 #00ffff);
+            }
+            80% {
+                transform: translate(1.25px, -2.5px) skewX(-1.25deg);
+                filter: drop-shadow(2.5px 0 #ff6666) drop-shadow(-2.5px 0 #00ffff);
+            }
+            100% {
+                transform: translate(0);
+                filter: none;
+            }
         }
     `;
     // We need to inject styles into document head so the nav bar badge gets them
@@ -185,18 +221,28 @@ export function initHUD(pageType) {
     shadow.appendChild(container);
 
     // Make draggable via the overlay handle
-    makeDraggable(container, dragHandle, savedState);
+    makeDraggable(container, dragHandle, savedState, content);
 
     return { shadow, container, content };
 }
 
-function makeDraggable(element, handle, stateObj) {
+function triggerTempGlitch(contentElement) {
+    if (!contentElement) return;
+    contentElement.classList.add('glitch-active');
+    setTimeout(() => {
+        contentElement.classList.remove('glitch-active');
+    }, 200);
+}
+
+function makeDraggable(element, handle, stateObj, contentElement) {
     let isDragging = false;
+    let hasGlitchedOnMove = false;
     let startX = 0, startY = 0, initialX = 0, initialY = 0;
 
     handle.addEventListener('mousedown', (e) => {
         if (e.target.classList.contains('hunter-hud-toggle')) return;
         isDragging = true;
+        hasGlitchedOnMove = false;
         startX = e.clientX;
         startY = e.clientY;
         const rect = element.getBoundingClientRect();
@@ -209,6 +255,10 @@ function makeDraggable(element, handle, stateObj) {
 
     function onMouseMove(e) {
         if (!isDragging) return;
+        if (!hasGlitchedOnMove) {
+            hasGlitchedOnMove = true;
+            triggerTempGlitch(contentElement);
+        }
         const dx = e.clientX - startX;
         const dy = e.clientY - startY;
         element.style.left = `${initialX + dx}px`;
@@ -222,6 +272,9 @@ function makeDraggable(element, handle, stateObj) {
             stateObj.left = element.style.left;
             stateObj.top = element.style.top;
             saveHUDState(stateObj);
+            if (hasGlitchedOnMove) {
+                triggerTempGlitch(contentElement);
+            }
         }
         isDragging = false;
         document.removeEventListener('mousemove', onMouseMove);

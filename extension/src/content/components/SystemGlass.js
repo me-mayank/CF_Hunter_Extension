@@ -99,8 +99,8 @@ export class SystemGlass {
                 @keyframes rgb-split {
                     0% { text-shadow: none; transform: none; }
                     100% { 
-                        text-shadow: -3.1px 0 red, 3.1px 0 cyan; 
-                        transform: translate(-1.5px, 1.5px);
+                        text-shadow: -3.9px 0 red, 3.9px 0 cyan; 
+                        transform: translate(-1.9px, 1.9px);
                     }
                 }
 

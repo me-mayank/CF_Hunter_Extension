@@ -25,6 +25,7 @@ export function getRecommendedStrategy(threatLabel) {
         case "Dangerous": return "This Monster exceeds your current strength. Caution advised.";
         case "Very Dangerous": return "Extreme risk detected. Retreat or prepare thoroughly before engaging.";
         case "Catastrophic": return "This encounter is not survivable at your current rank. Retreat immediately.";
+        case "UNKNOWN": return "Threat unquantifiable. Exercise with caution.";
         default: return "Threat unquantifiable. Proceed at your own risk.";
     }
 }

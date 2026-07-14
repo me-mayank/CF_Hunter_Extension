@@ -18,6 +18,7 @@ import { translateRank, formatNumber, translateTag } from '../shared/terminology
 import { STAT_ICONS, getRecommendedStrategy, getMonsterName, getHunterRecommendation, HUNTER_CLASSES, HUNTER_TYPE_BY_SKILL, getSelfRecommendation } from '../shared/constants.js';
 import { countUp, typeText } from './hud/animations.js';
 import { runBootSequence } from './hud/bootSequence.js';
+import { initIdleGlitch } from './hud/idleGlitch.js';
 
 export async function main() {
     console.log("Hunter System: Main module loaded.");
@@ -26,6 +27,9 @@ export async function main() {
     // Initialize the HUD shell (Phase 4)
     const hud = initHUD(pageType);
     if (!hud) return; // Already initialized
+    
+    // Start idle glitch monitoring on the container content only
+    initIdleGlitch(hud.content);
 
     if (pageType === PAGE_TYPES.PROFILE) {
         await handleProfilePage(hud);
@@ -34,7 +38,15 @@ export async function main() {
     } else if (pageType === PAGE_TYPES.CONTEST) {
         await handleContestPage(hud);
     } else {
-        updateHUDContent(hud, `Standby Mode.<br>Awaiting relevant targets.`);
+        updateHUDContent(hud, `
+            <div style="font-size: 16px; margin-bottom: 12px; color: var(--sys-color-level);">STANDBY MODE</div>
+            <div style="color: var(--sys-text-muted); margin-bottom: 12px; font-size: 12px;">Awaiting relevant targets:</div>
+            <div style="text-align: left; display: inline-block; color: var(--sys-text-muted); font-size: 11px;">
+                <div style="margin-bottom: 6px;">◆ <span style="color: var(--sys-text);">Hunter Profiles</span> (User Profile)</div>
+                <div style="margin-bottom: 6px;">◆ <span style="color: var(--sys-text);">Dungeon Gates</span> (Contests)</div>
+                <div>◆ <span style="color: var(--sys-text);">Monsters</span> (Problems)</div>
+            </div>
+        `);
     }
 }
 
@@ -157,7 +169,7 @@ function startRegistrationFlow(hud, handle, isColdStart) {
                 // Ignore response, just kick off the job
             });
 
-            updateHUDContent(hud, `Synchronizing with Hunter Association...<br><div id="sse-stage" style="margin-top:16px; color:var(--sys-frame-primary);"></div>`);
+            updateHUDContent(hud, `GATHERING HUNTER INTEL...<br><div id="sse-stage" style="margin-top:16px; color:var(--sys-frame-primary);"></div>`);
             const stageDiv = queryHUD(hud, '#sse-stage');
             
             startRegistrationStream(handle, (data) => {
@@ -191,7 +203,9 @@ function startRegistrationFlow(hud, handle, isColdStart) {
                 updateHUDContent(hud, `Registration Failed.`);
             }
         }, (err) => {
-            if (stageDiv) stageDiv.innerText += `\n[Stream Error - Falling back to polling...]`;
+            if (stageDiv) {
+                stageDiv.innerHTML += `<br><br><span style="color: var(--sys-color-danger);">[Stream Error - Falling back to polling...]</span><br><span style="font-size: 15px; color: var(--sys-text-muted); font-family: var(--sys-font-secondary); margin-top: 4px; display: inline-block;">If data does not appear in 5 seconds, please refresh.</span>`;
+            }
             pollStatus(hud, handle);
         });
         } // Close if
@@ -201,32 +215,50 @@ function startRegistrationFlow(hud, handle, isColdStart) {
 
 function pollStatus(hud, handle) {
     const stageDiv = queryHUD(hud, '#sse-stage');
+    
+    let dots = 0;
+    const dotInterval = setInterval(() => {
+        dots = (dots + 1) % 4;
+        if (stageDiv && stageDiv.getAttribute('data-polling') === 'true') {
+            const baseText = stageDiv.getAttribute('data-base-text') || 'GATHERING HUNTER INTEL';
+            stageDiv.innerText = baseText + '.'.repeat(dots);
+        }
+    }, 500);
+
+    let attempts = 0;
+    const maxAttempts = 12; // 60 seconds total
+
     const interval = setInterval(() => {
-        chrome.runtime.sendMessage({ type: 'GET_STATUS', handle }, async (response) => {
-            if (response.ok && response.data && response.data.status === 'READY') {
+        attempts++;
+        if (attempts >= maxAttempts) {
+            clearInterval(interval);
+            clearInterval(dotInterval);
+            updateHUDContent(hud, `<div style="text-align:center; color: var(--sys-color-danger); font-family: var(--sys-font-primary);">SYSTEM STALLED<br><br><span style="font-size: 14px; color: var(--sys-text-muted); font-family: var(--sys-font-secondary);">Connection timeout. Please refresh the page to restart the synchronization.</span></div>`);
+            return;
+        }
+
+        chrome.runtime.sendMessage({ type: 'GET_HUNTER', handle }, async (response) => {
+            if (response.ok && response.data) {
                 clearInterval(interval);
-                chrome.runtime.sendMessage({ type: 'GET_HUNTER', handle }, async (profileResponse) => {
-                    if (profileResponse.ok) {
-                        const oldProfile = await getCachedProfile(handle);
-                        checkMilestones(oldProfile, profileResponse.data);
-                        await setCachedProfile(handle, profileResponse.data);
-                        renderProfile(hud, profileResponse.data, loggedInProfile);
-                    } else {
-                        updateHUDContent(hud, `Failed to retrieve Profile.`);
-                    }
-                });
+                clearInterval(dotInterval);
+                const oldProfile = await getCachedProfile(handle);
+                checkMilestones(oldProfile, response.data);
+                await setCachedProfile(handle, response.data);
+                renderProfile(hud, response.data, loggedInProfile);
             } else if ((!response.ok && response.reason === 'PROCESSING') || (response.ok && response.data && response.data.status === 'PROCESSING')) {
                 const stage = (!response.ok) ? (response.stage || 'FETCHING_DATA') : (response.data.stage || 'FETCHING_DATA');
                 if (stage && stageDiv) {
-                    stageDiv.innerText = formatStage(stage) + ' (polling)';
+                    stageDiv.setAttribute('data-polling', 'true');
+                    stageDiv.setAttribute('data-base-text', formatStage(stage) + ' [Polling]');
                 }
             } else {
                 clearInterval(interval);
+                clearInterval(dotInterval);
                 console.error("Hunter System Polling Failed:", response);
-                updateHUDContent(hud, `Polling Failed.`);
+                updateHUDContent(hud, `<div style="text-align:center; color: var(--sys-color-danger); font-family: var(--sys-font-primary);">POLLING FAILED<br><br><span style="font-size: 14px; color: var(--sys-text-muted); font-family: var(--sys-font-secondary);">An error occurred. Please refresh the page to try again.</span></div>`);
             }
         });
-    }, 3000);
+    }, 5000);
 }
 
 async function renderProfile(hud, profile, viewerProfile = null) {

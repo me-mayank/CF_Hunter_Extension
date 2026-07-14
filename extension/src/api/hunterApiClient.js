@@ -15,7 +15,7 @@ async function fetchWithColdStartDetection(url, options = {}) {
             return { ok: true, data, isColdStart };
         } else if (response.status === 202) {
             const data = await response.json();
-            return { ok: false, reason: 'PROCESSING', jobId: data.jobId, isColdStart };
+            return { ok: false, reason: 'PROCESSING', jobId: data.jobId, isColdStart, stage: data.stage };
         } else if (response.status === 404) {
             return { ok: false, reason: 'NOT_FOUND' };
         } else if (response.status === 429) {

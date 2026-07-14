@@ -1,6 +1,20 @@
 import { classifyThreat } from './threatClassification.js';
 
 export function analyzeMonster(problemRating, hunterProfile) {
+    if (!problemRating || problemRating === 0) {
+        return {
+            threatLabel: "UNKNOWN",
+            threatColor: "var(--sys-text-muted)",
+            threatGlow: "rgba(255, 255, 255, 0.3)",
+            threatDifference: 0,
+            relativeStrength: "Unanalyzable Entity",
+            estimatedSuccess: "???",
+            recommendedRankRating: 0,
+            estimatedDifficulty: "UNKNOWN",
+            warning: "EXERCISE WITH CAUTION"
+        };
+    }
+
     const hunterRating = hunterProfile?.hunterRank?.rating || 0;
     const threat = classifyThreat(problemRating, hunterRating);
     

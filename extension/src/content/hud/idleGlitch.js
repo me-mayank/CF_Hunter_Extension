@@ -5,7 +5,7 @@
  */
 
 let idleTimer = null;
-const IDLE_TIMEOUT_MS = 6000;
+const IDLE_TIMEOUT_MS = 5000;
 let isGlitching = false;
 let hudContentElement = null;
 

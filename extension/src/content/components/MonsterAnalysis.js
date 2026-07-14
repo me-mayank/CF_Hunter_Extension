@@ -229,7 +229,7 @@ export class MonsterAnalysis {
                         ${problem.name || problem.id || "Unknown Entity"}
                     </div>
                     <div class="sys-label anim-seq delay-2" style="text-transform: none; margin-bottom: 8px; font-size: 12px;">
-                        Rating: <span class="anim-num" data-target-num="${problem.rating || 0}">0</span>
+                        Rating: ${problem.rating ? `<span class="anim-num" data-target-num="${problem.rating}">0</span>` : '<span style="color: var(--sys-text-muted);">UNKNOWN</span>'}
                     </div>
                     <div class="anim-seq delay-3" style="border: 1px solid ${analysis.threatColor}; color: ${analysis.threatColor}; padding: 3px 10px; font-size: 11px; font-family: var(--sys-font-secondary); text-transform: uppercase; font-weight: bold; background: rgba(0,0,0,0.5); border-radius: 2px;">
                         ▲ ${analysis.threatLabel}
@@ -257,14 +257,14 @@ export class MonsterAnalysis {
                 <div style="display: flex; flex-direction: column; align-items: center; margin-top: 4px;">
                     <div class="sys-section-header anim-seq delay-6" style="font-size: 11px; margin-bottom: 6px;">${LABELS.SKILLS_REQUIRED}</div>
                     <div class="anim-seq delay-6" style="display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; margin-bottom: auto; padding-bottom: 2px;">
-                        ${uniqueTags.map(translated => {
+                        ${uniqueTags.length > 0 ? uniqueTags.map(translated => {
                             const upper = translated.toUpperCase();
                             const lower = translated.toLowerCase();
                             const matchesViewer = profile && profile.skillAffinities && profile.skillAffinities[lower];
                             const pillColor = SKILL_COLORS[lower] || 'var(--sys-frame-primary)';
                             const borderStyle = matchesViewer ? `1px solid ${pillColor}` : `1px dashed ${pillColor}`;
                             return "<div style=\"border: " + borderStyle + "; color: " + pillColor + "; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-family: var(--sys-font-secondary); text-transform: uppercase;\">◆ " + upper + "</div>";
-                        }).join('')}
+                        }).join('') : "<div style=\"border: 1px dashed var(--sys-text-muted); color: var(--sys-text-muted); padding: 2px 8px; border-radius: 4px; font-size: 10px; font-family: var(--sys-font-secondary); text-transform: uppercase;\">◆ UNCATEGORIZED ANOMALY</div>"}
                     </div>
                 </div>
 
