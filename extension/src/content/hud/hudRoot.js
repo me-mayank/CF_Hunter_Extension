@@ -208,9 +208,13 @@ export function initHUD(pageType) {
         container.style.bottom = 'auto';
         container.style.right = 'auto';
     } else {
-        // Default positioning floating above the badge
-        container.style.bottom = '60px';
-        container.style.right = '20px';
+        // Default positioning centered
+        const defaultWidth = 380;
+        const defaultHeight = 600;
+        container.style.top = Math.max(0, (window.innerHeight - defaultHeight) / 2) + 'px';
+        container.style.left = Math.max(0, (window.innerWidth - defaultWidth) / 2) + 'px';
+        container.style.bottom = 'auto';
+        container.style.right = 'auto';
     }
 
     // Apply collapsed state
