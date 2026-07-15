@@ -22,13 +22,6 @@ export function initHUD(pageType) {
             font-weight: normal;
             font-style: normal;
         }
-        .system-badge-container {
-            float: left;
-            margin-left: 20px;
-            height: 3em;
-            display: flex;
-            align-items: center;
-        }
         .system-online-badge {
             position: relative;
             background: rgba(5, 10, 15, 0.9);
@@ -138,7 +131,9 @@ export function initHUD(pageType) {
     const navBar = document.querySelector('.menu-list.main-menu-list');
     if (navBar) {
         const li = document.createElement('li');
-        li.className = 'system-badge-container';
+        // Let Codeforces style this as a normal nav item so it flows naturally
+        // Center the badge vertically (CF nav is ~40px tall, badge is 26px)
+        onlineBadge.style.margin = '7px 10px 0 10px';
         li.appendChild(onlineBadge);
         navBar.appendChild(li);
     } else {

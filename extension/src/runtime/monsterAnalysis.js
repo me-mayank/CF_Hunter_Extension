@@ -4,8 +4,8 @@ export function analyzeMonster(problemRating, hunterProfile) {
     if (!problemRating || problemRating === 0) {
         return {
             threatLabel: "UNKNOWN",
-            threatColor: "var(--sys-text-muted)",
-            threatGlow: "rgba(255, 255, 255, 0.3)",
+            threatColor: "var(--sys-color-danger)",
+            threatGlow: "rgba(255, 47, 110, 0.4)",
             threatDifference: 0,
             relativeStrength: "Unanalyzable Entity",
             estimatedSuccess: "???",

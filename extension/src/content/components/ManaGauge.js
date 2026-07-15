@@ -1,4 +1,4 @@
-export function renderManaGauge(currentMana, peakMana, color = 'var(--sys-color-mana)', animate = false, rightLabelHtml = '') {
+export function renderManaGauge(currentMana, peakMana, color = 'var(--sys-color-mana)', animate = false, rightLabelHtml = '', showInfoBtn = false) {
     const maxMana = 5000;
     const currentClamped = Math.min(maxMana, Math.max(0, currentMana));
     const peakClamped = Math.min(maxMana, Math.max(0, peakMana));
@@ -8,10 +8,12 @@ export function renderManaGauge(currentMana, peakMana, color = 'var(--sys-color-
 
     const delayClass = animate ? 'anim-seq delay-4' : '';
     
+    const infoBtnHtml = showInfoBtn ? `<span class="sys-info-btn" data-info="mana" style="cursor: pointer; color: var(--sys-frame-primary); font-size: 10px; border: 1px solid var(--sys-frame-primary); padding: 0 4px; border-radius: 2px; margin-left: 6px; user-select: none;">i</span>` : '';
+    
     return `
         <div class="mana-gauge-container ${delayClass}" style="width: 100%; margin: 8px 0 12px 0; display: flex; flex-direction: column; gap: 4px;">
             <div style="display: flex; justify-content: space-between; align-items: flex-end; padding: 0 2px;">
-                <div class="sys-label" style="font-size: 14px;">MANA POWER</div>
+                <div class="sys-label" style="font-size: 14px; display: flex; align-items: center;">MANA POWER${infoBtnHtml}</div>
                 <div style="display: flex; gap: 8px; align-items: baseline;">
                     <div class="sys-value" style="color: ${color}; font-size: 18px;">${Math.floor(currentMana)}</div>
                     ${rightLabelHtml}

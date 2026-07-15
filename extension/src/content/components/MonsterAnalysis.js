@@ -4,6 +4,7 @@ import { translateTag, LABELS, getMonsterSystemSentence } from '../../shared/ter
 
 import { SystemHeader } from './SystemHeader.js';
 import { renderManaGauge } from './ManaGauge.js';
+import { showSystemInfo } from '../hud/systemWindows.js';
 
 export class MonsterAnalysis {
     constructor() {
@@ -217,6 +218,11 @@ export class MonsterAnalysis {
                 .delay-4 { animation-delay: 0.9s; }
                 .delay-5 { animation-delay: 1.0s; }
                 .delay-6 { animation-delay: 1.1s; }
+                .sys-info-btn:hover {
+                    background: rgba(0, 240, 255, 0.1);
+                    text-shadow: 0 0 5px var(--sys-frame-primary);
+                    box-shadow: 0 0 5px var(--sys-frame-primary);
+                }
             </style>
 
             <div id="header-container" class="anim-seq delay-1"></div>
@@ -229,7 +235,7 @@ export class MonsterAnalysis {
                         ${problem.name || problem.id || "Unknown Entity"}
                     </div>
                     <div class="sys-label anim-seq delay-2" style="text-transform: none; margin-bottom: 8px; font-size: 12px;">
-                        Rating: ${problem.rating ? `<span class="anim-num" data-target-num="${problem.rating}">0</span>` : '<span style="color: var(--sys-text-muted);">UNKNOWN</span>'}
+                        Rating: ${problem.rating ? `<span class="anim-num" data-target-num="${problem.rating}">0</span>` : '<span style="color: var(--sys-color-danger); font-weight: bold;">UNKNOWN</span>'}
                     </div>
                     <div class="anim-seq delay-3" style="border: 1px solid ${analysis.threatColor}; color: ${analysis.threatColor}; padding: 3px 10px; font-size: 11px; font-family: var(--sys-font-secondary); text-transform: uppercase; font-weight: bold; background: rgba(0,0,0,0.5); border-radius: 2px;">
                         ▲ ${analysis.threatLabel}
@@ -255,7 +261,7 @@ export class MonsterAnalysis {
 
                 <!-- SKILL AFFINITIES -->
                 <div style="display: flex; flex-direction: column; align-items: center; margin-top: 4px;">
-                    <div class="sys-section-header anim-seq delay-6" style="font-size: 11px; margin-bottom: 6px;">${LABELS.SKILLS_REQUIRED}</div>
+                    <div class="sys-section-header anim-seq delay-6" style="font-size: 11px; margin-bottom: 6px; display: flex; align-items: center;">${LABELS.SKILLS_REQUIRED} <span class="sys-info-btn" data-info="skills" style="cursor: pointer; color: var(--sys-frame-primary); font-size: 9px; border: 1px solid var(--sys-frame-primary); padding: 0 4px; border-radius: 2px; margin-left: 6px; user-select: none; line-height: 1.2;">i</span></div>
                     <div class="anim-seq delay-6" style="display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; margin-bottom: auto; padding-bottom: 2px;">
                         ${uniqueTags.length > 0 ? uniqueTags.map(translated => {
                             const upper = translated.toUpperCase();
@@ -264,7 +270,7 @@ export class MonsterAnalysis {
                             const pillColor = SKILL_COLORS[lower] || 'var(--sys-frame-primary)';
                             const borderStyle = matchesViewer ? `1px solid ${pillColor}` : `1px dashed ${pillColor}`;
                             return "<div style=\"border: " + borderStyle + "; color: " + pillColor + "; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-family: var(--sys-font-secondary); text-transform: uppercase;\">◆ " + upper + "</div>";
-                        }).join('') : "<div style=\"border: 1px dashed var(--sys-text-muted); color: var(--sys-text-muted); padding: 2px 8px; border-radius: 4px; font-size: 10px; font-family: var(--sys-font-secondary); text-transform: uppercase;\">◆ UNCATEGORIZED ANOMALY</div>"}
+                        }).join('') : "<div style=\"border: 1px dashed var(--sys-color-danger); color: var(--sys-color-danger); padding: 2px 8px; border-radius: 4px; font-size: 10px; font-family: var(--sys-font-secondary); text-transform: uppercase; font-weight: bold;\">◆ UNCATEGORIZED ANOMALY</div>"}
                     </div>
                 </div>
 
@@ -301,5 +307,26 @@ export class MonsterAnalysis {
                 requestAnimationFrame(animate);
             });
         }, 800);
+
+        // Setup Info Buttons
+        const infoBtns = this.shadowRoot.querySelectorAll('.sys-info-btn');
+        infoBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const type = btn.getAttribute('data-info');
+                if (type === 'skills') {
+                    showSystemInfo("SKILLS REQUIRED", 
+                        "The System categorizes Codeforces tags into Hunter Combat Specialties:<br><br>" +
+                        "◆ <b>STRENGTH</b>: implementation, brute force, constructive algorithms, math<br>" +
+                        "◆ <b>MAGIC</b>: dp, graphs, trees, math<br>" +
+                        "◆ <b>AGILITY</b>: greedy, sortings, two pointers, binary search<br>" +
+                        "◆ <b>STRATEGY</b>: data structures, divide and conquer, geometry, strings<br>" +
+                        "◆ <b>PERCEPTION</b>: dfs and similar, shortest paths, dsu<br>" +
+                        "◆ <b>INTELLIGENCE</b>: number theory, combinatorics, probabilities, bitmasks<br><br>" +
+                        "Skills highlighted with solid borders match your current affinities, while dashed borders indicate untrained areas."
+                    );
+                }
+            });
+        });
     }
 }

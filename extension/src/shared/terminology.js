@@ -19,6 +19,11 @@ export const LABELS = {
     SKILLS_REQUIRED: "SKILLS REQUIRED"
 };
 
+export function formatStage(stage) {
+    if (!stage) return '';
+    return stage.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) + "...";
+}
+
 export function getMonsterSystemSentence(threatLabel, monsterClass) {
     if (threatLabel.includes("Safe") || threatLabel.includes("Low")) {
         return "This target poses no threat.";

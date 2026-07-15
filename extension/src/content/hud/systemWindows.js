@@ -87,3 +87,56 @@ export function checkMilestones(oldProfile, newProfile) {
         showSystemWindow("HUNTER PROMOTION", `Rank upgraded to ${translatedRank.label.toUpperCase()}!`);
     }
 }
+
+export function showSystemInfo(title, message) {
+    const windowEl = document.createElement('div');
+    windowEl.className = 'hunter-system-window system-panel animate-materialize';
+    
+    windowEl.style.position = 'fixed';
+    windowEl.style.top = '50%';
+    windowEl.style.left = '50%';
+    windowEl.style.transform = 'translate(-50%, -50%)';
+    windowEl.style.width = '300px';
+    windowEl.style.zIndex = '9999999';
+
+    windowEl.innerHTML = `
+        <div class="system-panel-inner-brackets"></div>
+        <div class="scanline-sweep"></div>
+        <div class="hunter-window-title" style="font-size:14px; margin-bottom:12px; color: var(--sys-color-level);">[ ${title} ]</div>
+        <div class="hunter-window-message" style="color:var(--sys-text); font-size: 13px; line-height: 1.5; text-align: left;">${message}</div>
+        <div style="margin-top: 16px; text-align: right;">
+            <button class="sys-close-btn" style="background: rgba(0,0,0,0.5); border: 1px solid var(--sys-frame-primary); color: var(--sys-frame-primary); padding: 4px 12px; font-family: var(--sys-font-secondary); font-size: 11px; cursor: pointer; text-transform: uppercase;">Acknowledge</button>
+        </div>
+    `;
+
+    const overlay = document.createElement('div');
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100vw';
+    overlay.style.height = '100vh';
+    overlay.style.background = 'rgba(0,0,0,0.6)';
+    overlay.style.zIndex = '9999998';
+    overlay.style.backdropFilter = 'blur(2px)';
+    
+    const root = document.getElementById('hunter-system-hud-root');
+    const container = root && root.shadowRoot ? root.shadowRoot : document.body;
+    
+    container.appendChild(overlay);
+    container.appendChild(windowEl);
+    
+    playChime();
+
+    const close = () => {
+        windowEl.classList.add('fade-out');
+        overlay.style.transition = 'opacity 0.3s ease';
+        overlay.style.opacity = '0';
+        setTimeout(() => {
+            if (windowEl.parentNode) windowEl.parentNode.removeChild(windowEl);
+            if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+        }, 500);
+    };
+
+    windowEl.querySelector('.sys-close-btn').addEventListener('click', close);
+    overlay.addEventListener('click', close);
+}

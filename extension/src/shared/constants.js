@@ -183,3 +183,17 @@ export const STAT_ICONS = {
     MONSTER: "❖",
     PROBLEM: "▪"
 };
+
+export const CF_VERDICT_MAPPING = {
+    "OK": { text: "◆ MONSTER DEFEATED", color: "var(--sys-color-level)" },
+    "WRONG_ANSWER": { text: "✕ ATTACK MISSED", color: "var(--sys-color-danger)" },
+    "COMPILATION_ERROR": { text: "⚠ WEAPON MALFORMED", color: "var(--sys-color-warning)" },
+    "TIME_LIMIT_EXCEEDED": { text: "⏱ MONSTER OUTRAN YOUR STRIKE", color: "var(--sys-color-warning)" },
+    "RUNTIME_ERROR": { text: "⚡ WEAPON BACKFIRED", color: "var(--sys-color-danger)" },
+    "MEMORY_LIMIT_EXCEEDED": { text: "◈ MANA OVERFLOW", color: "var(--sys-color-warning)" },
+    "IDLENESS_LIMIT_EXCEEDED": { text: "⏳ HESITATION COST YOU THE ENGAGEMENT", color: "var(--sys-color-warning)" },
+    "CHALLENGED": { text: "✕ ENCOUNTER INVALIDATED", color: "var(--sys-color-danger)" },
+    "SKIPPED": { text: "◇ COMBAT ABORTED", color: "var(--sys-text-muted)" },
+    "TESTING": { text: "↻ ANALYZING ATTACK...", color: "var(--sys-text)" },
+    "UNKNOWN": { text: "◇ VERDICT UNCLEAR — Re-scan recommended", color: "var(--sys-text-muted)" }
+};
