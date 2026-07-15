@@ -75,6 +75,8 @@ export class HunterAnalysis {
             }
         }
         const hunterClassLabel = HUNTER_TYPE_BY_SKILL[dominantSkill] || "Unclassified Hunter";
+        const dominantLower = dominantSkill.toLowerCase();
+        const primaryColor = SKILL_COLORS[dominantLower] || 'var(--sys-frame-primary)';
         
         let progressPercent = 100;
         const currentRating = profile.hunterRank?.rating || 0;
@@ -106,9 +108,9 @@ export class HunterAnalysis {
             <div class="anim-seq delay-2" style="display: flex; gap: 12px; align-items: center; margin-bottom: 16px; justify-content: center;">
                 <img class="avatar" src="${avatarUrl}" alt="${profile.handle}" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 72 72%22><rect width=%2272%22 height=%2272%22 fill=%22%230f172a%22/><path d=%22M36 20C29.373 20 24 25.373 24 32C24 38.627 29.373 44 36 44C42.627 44 48 38.627 48 32C48 25.373 42.627 20 36 20ZM36 48C24.954 48 16 56.954 16 68H56C56 56.954 47.046 48 36 48Z%22 fill=%22%23334155%22/></svg>';">
                 <div style="display: flex; flex-direction: column;">
-                    <div class="hunter-name" style="color: var(--sys-frame-primary); font-size: 24px; text-shadow: none; font-weight: bold;">${(profile.displayName || profile.handle).toUpperCase()}</div>
+                    <div class="hunter-name" style="color: #F8FAFC; font-size: 24px; text-shadow: 0 0 10px rgba(248, 250, 252, 0.4); font-weight: bold;">${(profile.displayName || profile.handle).toUpperCase()}</div>
                     <div class="hunter-sub" style="display: flex; align-items: center; gap: 6px; color:${rankTier.color}; margin-top: 4px; font-size: 16px; font-family: var(--sys-font-secondary); letter-spacing: 1px;">[${rankTier.label.toUpperCase()}] <span class="sys-info-btn" data-info="rank" style="cursor: pointer; color: var(--sys-frame-primary); font-size: 10px; border: 1px solid var(--sys-frame-primary); padding: 0 4px; border-radius: 2px; user-select: none;">i</span></div>
-                    <div class="hunter-sub" style="display: flex; align-items: center; gap: 6px; color:var(--sys-frame-primary); margin-top: 4px; font-size: 16px; font-family: var(--sys-font-secondary); letter-spacing: 1px;">${hunterClassLabel.toUpperCase()} <span class="sys-info-btn" data-info="type" style="cursor: pointer; color: var(--sys-frame-primary); font-size: 10px; border: 1px solid var(--sys-frame-primary); padding: 0 4px; border-radius: 2px; user-select: none;">i</span></div>
+                    <div class="hunter-sub" style="display: flex; align-items: center; gap: 6px; color:${primaryColor}; margin-top: 4px; font-size: 16px; font-family: var(--sys-font-secondary); letter-spacing: 1px;">${hunterClassLabel.toUpperCase()} <span class="sys-info-btn" data-info="type" style="cursor: pointer; color: ${primaryColor}; font-size: 10px; border: 1px solid ${primaryColor}; padding: 0 4px; border-radius: 2px; user-select: none;">i</span></div>
                     <div style="margin-top: 8px;">
                         <button id="btn-reanalyze" class="sys-info-btn" style="cursor: pointer; color: var(--sys-frame-primary); font-size: 10px; border: 1px solid var(--sys-frame-primary); padding: 4px 8px; border-radius: 2px; font-family: var(--sys-font-secondary); background: transparent; letter-spacing: 1px; text-transform: uppercase; transition: all 0.2s ease;">
                             ◆ RE-ANALYZE
@@ -152,8 +154,7 @@ export class HunterAnalysis {
             </div>
         `;
 
-        const dominantLower = dominantSkill.toLowerCase();
-        const primaryColor = SKILL_COLORS[dominantLower] || 'var(--sys-frame-primary)';
+
 
         let bottomRowHtml = `
             <div class="anim-seq delay-5" style="display: flex; justify-content: space-between; align-items: baseline; width: 100%; margin-bottom: 4px;">

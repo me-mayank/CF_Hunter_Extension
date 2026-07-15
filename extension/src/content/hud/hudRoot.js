@@ -24,58 +24,42 @@ export function initHUD(pageType) {
         }
         .system-online-badge {
             position: relative;
-            background: rgba(5, 10, 15, 0.9);
+            background: rgba(0, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-left: 3px solid #00ffff;
             color: #00ffff;
             font-family: 'Share Tech Mono', monospace;
             font-size: 13px;
             cursor: pointer;
-            border-radius: 3px;
-            font-weight: normal;
+            border-radius: 2px;
+            font-weight: bold;
             height: 26px;
-            padding: 0 16px;
-            display: flex;
+            padding: 0 10px;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
-            box-shadow: 0 0 12px rgba(0, 255, 255, 0.2);
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.1), inset 0 0 10px rgba(0, 255, 255, 0.05);
             transition: all 0.3s ease;
+            margin: 0 0 0 4px;
+            line-height: normal;
+            box-sizing: border-box;
+            top: -3px;
+            text-decoration: none;
         }
         
         .system-online-badge:hover {
-            box-shadow: 0 0 18px rgba(0, 255, 255, 0.4);
-            transform: scale(1.02);
+            background: rgba(0, 255, 255, 0.15);
+            border-color: #00ffff;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.3), inset 0 0 10px rgba(0, 255, 255, 0.1);
+            transform: translateY(-1px);
         }
         
-        .system-online-badge::before {
-            content: '';
-            position: absolute;
-            width: 300%;
-            height: 300%;
-            background: conic-gradient(from 0deg, transparent 75%, #00ffff 100%);
-            animation: badge-rotate 2s linear infinite;
-            z-index: 0;
-        }
-
-        .system-online-badge::after {
-            content: '';
-            position: absolute;
-            inset: 1.5px;
-            background: rgba(5, 10, 15, 0.95);
-            border-radius: 2px;
-            z-index: 1;
-        }
-
         .system-online-badge > span {
             position: relative;
             z-index: 2;
-            letter-spacing: 1.5px;
+            letter-spacing: 2px;
             text-shadow: 0 0 6px rgba(0, 255, 255, 0.7);
             margin-bottom: -1px; /* Visual centering for this font */
-        }
-
-        @keyframes badge-rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
         }
         .drag-handle {
             position: absolute;
@@ -121,7 +105,7 @@ export function initHUD(pageType) {
     shadow.appendChild(styleTag);
 
     // Create the separate Online Badge
-    const onlineBadge = document.createElement('div');
+    const onlineBadge = document.createElement('a');
     onlineBadge.className = 'system-online-badge';
     const badgeText = document.createElement('span');
     badgeText.textContent = 'SYSTEM';
@@ -133,7 +117,6 @@ export function initHUD(pageType) {
         const li = document.createElement('li');
         // Let Codeforces style this as a normal nav item so it flows naturally
         // Center the badge vertically (CF nav is ~40px tall, badge is 26px)
-        onlineBadge.style.margin = '7px 10px 0 10px';
         li.appendChild(onlineBadge);
         navBar.appendChild(li);
     } else {

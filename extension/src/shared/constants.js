@@ -150,7 +150,7 @@ export const MONSTER_CLASSES = [
     { minRating: 1700, name: "Ancient Dragon" },
     { minRating: 1800, name: "Arch Demon" },
     { minRating: 1900, name: "Demon Lord" },
-    { minRating: 2000, name: "Monarch Class" }
+    { minRating: 2000, name: "Monarch Rank" }
 ];
 
 export function getMonsterName(rating) {

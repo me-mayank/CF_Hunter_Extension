@@ -228,16 +228,15 @@ export class MonsterAnalysis {
             <div id="header-container" class="anim-seq delay-1"></div>
 
             <div class="status-container" style="justify-content: flex-start; padding: 0 10px 4px 10px;">
-                <!-- MONSTER DETECTED -->
                 <div style="display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 12px;">
                     <div class="sys-label anim-seq delay-2" style="font-size: 11px; margin-bottom: 4px;">MONSTER DETECTED</div>
                     <div class="anim-seq delay-2" style="color: ${analysis.threatColor}; text-shadow: 0 0 10px ${analysis.threatGlow}; font-family: var(--sys-font-primary); font-size: 24px; font-weight: 700; margin-bottom: 4px; line-height: 1.1;">
                         ${problem.name || problem.id || "Unknown Entity"}
                     </div>
-                    <div class="sys-label anim-seq delay-2" style="text-transform: none; margin-bottom: 8px; font-size: 12px;">
-                        Rating: ${problem.rating ? `<span class="anim-num" data-target-num="${problem.rating}">0</span>` : '<span style="color: var(--sys-color-danger); font-weight: bold;">UNKNOWN</span>'}
+                    <div class="anim-seq delay-2" style="margin-bottom: 8px; font-size: 18px; color: var(--sys-frame-primary); font-family: var(--sys-font-secondary); letter-spacing: 2px; text-transform: uppercase; text-shadow: 0 0 5px var(--sys-glow-subtle);">
+                        ${problem.rating ? getMonsterName(problem.rating) + ' (' + problem.rating + ')' : '<span style="color: var(--sys-color-danger); font-weight: bold;">UNKNOWN THREAT LEVEL</span>'}
                     </div>
-                    <div class="anim-seq delay-3" style="border: 1px solid ${analysis.threatColor}; color: ${analysis.threatColor}; padding: 3px 10px; font-size: 11px; font-family: var(--sys-font-secondary); text-transform: uppercase; font-weight: bold; background: rgba(0,0,0,0.5); border-radius: 2px;">
+                    <div class="anim-seq delay-3" style="border: 1px solid ${analysis.threatColor}; color: ${analysis.threatColor}; padding: 4px 14px; font-size: 16px; font-family: var(--sys-font-secondary); text-transform: uppercase; font-weight: bold; background: rgba(0,0,0,0.5); border-radius: 2px; letter-spacing: 1px; text-shadow: 0 0 5px ${analysis.threatGlow}; box-shadow: 0 0 10px rgba(0,0,0,0.5);">
                         ▲ ${analysis.threatLabel}
                     </div>
                 </div>
@@ -260,17 +259,17 @@ export class MonsterAnalysis {
                 </div>
 
                 <!-- SKILL AFFINITIES -->
-                <div style="display: flex; flex-direction: column; align-items: center; margin-top: 4px;">
-                    <div class="sys-section-header anim-seq delay-6" style="font-size: 11px; margin-bottom: 6px; display: flex; align-items: center;">${LABELS.SKILLS_REQUIRED} <span class="sys-info-btn" data-info="skills" style="cursor: pointer; color: var(--sys-frame-primary); font-size: 9px; border: 1px solid var(--sys-frame-primary); padding: 0 4px; border-radius: 2px; margin-left: 6px; user-select: none; line-height: 1.2;">i</span></div>
-                    <div class="anim-seq delay-6" style="display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; margin-bottom: auto; padding-bottom: 2px;">
+                <div style="display: flex; flex-direction: column; align-items: center; margin-top: 8px; margin-bottom: 8px;">
+                    <div class="sys-section-header anim-seq delay-6" style="font-size: 12px; margin-bottom: 8px; display: flex; align-items: center; letter-spacing: 2px;">${LABELS.SKILLS_REQUIRED} <span class="sys-info-btn" data-info="skills" style="cursor: pointer; color: var(--sys-frame-primary); font-size: 10px; border: 1px solid var(--sys-frame-primary); padding: 0 4px; border-radius: 2px; margin-left: 6px; user-select: none; line-height: 1.2;">i</span></div>
+                    <div class="anim-seq delay-6" style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: auto; padding-bottom: 2px;">
                         ${uniqueTags.length > 0 ? uniqueTags.map(translated => {
                             const upper = translated.toUpperCase();
                             const lower = translated.toLowerCase();
                             const matchesViewer = profile && profile.skillAffinities && profile.skillAffinities[lower];
                             const pillColor = SKILL_COLORS[lower] || 'var(--sys-frame-primary)';
                             const borderStyle = matchesViewer ? `1px solid ${pillColor}` : `1px dashed ${pillColor}`;
-                            return "<div style=\"border: " + borderStyle + "; color: " + pillColor + "; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-family: var(--sys-font-secondary); text-transform: uppercase;\">◆ " + upper + "</div>";
-                        }).join('') : "<div style=\"border: 1px dashed var(--sys-color-danger); color: var(--sys-color-danger); padding: 2px 8px; border-radius: 4px; font-size: 10px; font-family: var(--sys-font-secondary); text-transform: uppercase; font-weight: bold;\">◆ UNCATEGORIZED ANOMALY</div>"}
+                            return "<div style=\"border: " + borderStyle + "; color: " + pillColor + "; padding: 4px 12px; border-radius: 4px; font-size: 14px; font-family: var(--sys-font-secondary); text-transform: uppercase; letter-spacing: 1px; font-weight: bold;\">◆ " + upper + "</div>";
+                        }).join('') : "<div style=\"border: 1px dashed var(--sys-color-danger); color: var(--sys-color-danger); padding: 4px 12px; border-radius: 4px; font-size: 14px; font-family: var(--sys-font-secondary); text-transform: uppercase; font-weight: bold; letter-spacing: 1px;\">◆ UNCATEGORIZED ANOMALY</div>"}
                     </div>
                 </div>
 
