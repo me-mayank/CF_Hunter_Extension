@@ -119,6 +119,44 @@ export class SystemFrame {
                     animation-iteration-count: infinite;
                     animation-direction: alternate;
                 }
+
+                .content-slot {
+                    opacity: 0;
+                    animation: content-glitch-appear 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.8s forwards;
+                }
+
+                @keyframes content-glitch-appear {
+                    0% {
+                        opacity: 0;
+                        transform: scale(0.98) translateY(10px);
+                        filter: drop-shadow(4px 0 rgba(255,0,0,0.8)) drop-shadow(-4px 0 rgba(0,255,255,0.8));
+                    }
+                    20% {
+                        opacity: 0.8;
+                        transform: scale(1.02) translate(-2px, 2px) skewX(2deg);
+                        filter: drop-shadow(-4px 0 rgba(255,0,0,0.8)) drop-shadow(4px 0 rgba(0,255,255,0.8));
+                    }
+                    40% {
+                        opacity: 0.5;
+                        transform: scale(0.99) translate(2px, -2px) skewX(-2deg);
+                        filter: drop-shadow(2px 0 rgba(255,0,0,0.8)) drop-shadow(-2px 0 rgba(0,255,255,0.8));
+                    }
+                    60% {
+                        opacity: 1;
+                        transform: scale(1.01) translate(-1px, 1px) skewX(1deg);
+                        filter: drop-shadow(-2px 0 rgba(255,0,0,0.8)) drop-shadow(2px 0 rgba(0,255,255,0.8));
+                    }
+                    80% {
+                        opacity: 0.8;
+                        transform: scale(1) translate(1px, -1px) skewX(-1deg);
+                        filter: drop-shadow(1px 0 rgba(255,0,0,0.8)) drop-shadow(-1px 0 rgba(0,255,255,0.8));
+                    }
+                    100% {
+                        opacity: 1;
+                        transform: scale(1) translate(0) skewX(0);
+                        filter: none;
+                    }
+                }
             </style>
 
             <div class="frame-wrapper">
@@ -210,6 +248,7 @@ export class SystemFrame {
         this.contentContainer.style.overflowY = 'auto';
         this.contentContainer.style.overflowX = 'hidden';
         this.contentContainer.style.paddingBottom = '32px';
+        this.contentContainer.className = 'content-slot';
         glass.element.appendChild(this.contentContainer);
     }
 

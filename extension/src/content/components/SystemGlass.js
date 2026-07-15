@@ -21,7 +21,7 @@ export class SystemGlass {
                     border: var(--sys-border-inner) solid var(--sys-glass-border);
                     box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.5);
                     opacity: 0;
-                    animation: glass-appear 0.5s ease-out 0.2s forwards;
+                    animation: glass-appear 0.5s ease-out 0.4s forwards;
                     overflow: hidden;
                     min-height: 0;
                 }
