@@ -45,6 +45,7 @@ export function initHUD(pageType) {
             box-sizing: border-box;
             top: -3px;
             text-decoration: none;
+            animation: periodic-badge-glitch 3s infinite;
         }
         
         .system-online-badge:hover {
@@ -52,6 +53,7 @@ export function initHUD(pageType) {
             border-color: #00ffff;
             box-shadow: 0 0 15px rgba(0, 255, 255, 0.3), inset 0 0 10px rgba(0, 255, 255, 0.1);
             transform: translateY(-1px);
+            animation: none; /* stop glitch on hover */
         }
         
         .system-online-badge > span {
@@ -60,7 +62,27 @@ export function initHUD(pageType) {
             letter-spacing: 2px;
             text-shadow: 0 0 6px rgba(0, 255, 255, 0.7);
             margin-bottom: -1px; /* Visual centering for this font */
+            animation: periodic-text-glitch 3s infinite;
         }
+
+        .system-online-badge:hover > span {
+            animation: none;
+        }
+
+        @keyframes periodic-badge-glitch {
+            0%, 93%, 100% { transform: translate(0); }
+            94% { transform: translate(-2px, 1px) skewX(2deg); }
+            96% { transform: translate(2px, -1px) skewX(-2deg); }
+            98% { transform: translate(-1px, 0) skewX(1deg); }
+        }
+
+        @keyframes periodic-text-glitch {
+            0%, 93%, 100% { filter: none; }
+            94% { filter: drop-shadow(3px 0 rgba(255, 0, 60, 0.8)) drop-shadow(-3px 0 rgba(0, 255, 255, 0.8)); }
+            96% { filter: drop-shadow(-3px 0 rgba(255, 0, 60, 0.8)) drop-shadow(3px 0 rgba(0, 255, 255, 0.8)); }
+            98% { filter: drop-shadow(2px 0 rgba(255, 0, 60, 0.6)) drop-shadow(-2px 0 rgba(0, 255, 255, 0.6)); }
+        }
+
         .drag-handle {
             position: absolute;
             top: 0; left: 0; right: 0; height: 30px;
