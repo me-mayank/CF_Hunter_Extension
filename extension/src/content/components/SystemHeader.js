@@ -91,25 +91,33 @@ export class SystemHeader {
                 .support-btn {
                     position: absolute;
                     right: 32px;
-                    top: -6px;
-                    color: var(--sys-frame-primary);
-                    background: rgba(0, 255, 255, 0.1);
-                    border: 1px solid var(--sys-frame-primary);
-                    font-family: var(--sys-font-secondary);
-                    font-size: 10px;
+                    top: -10px;
+                    color: var(--sys-frame-secondary);
+                    background: none;
+                    border: none;
                     cursor: pointer;
-                    line-height: 1;
-                    padding: 4px 8px;
-                    transition: all 0.2s;
+                    padding: 4px;
+                    transition: all 0.3s ease;
                     z-index: 1000;
-                    text-transform: uppercase;
-                    letter-spacing: 1px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+
+                .support-btn svg {
+                    width: 20px;
+                    height: 20px;
+                    filter: drop-shadow(0 0 4px transparent);
+                    transition: all 0.3s ease;
                 }
 
                 .support-btn:hover {
-                    background: var(--sys-frame-primary);
-                    color: #000;
-                    box-shadow: 0 0 10px var(--sys-glow);
+                    color: var(--sys-frame-primary);
+                }
+
+                .support-btn:hover svg {
+                    filter: drop-shadow(0 0 8px var(--sys-glow));
+                    transform: translateY(-2px);
                 }
             </style>
 
@@ -122,7 +130,13 @@ export class SystemHeader {
                 <div class="control-node"></div>
                 <div class="control-node"></div>
             </div>
-            <button class="support-btn" title="Support System Architect" id="btn-support">[ SYSTEM SHOP ]</button>
+            <button class="support-btn" title="Donate Mana (Support System Architect)" id="btn-support">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L4 10l8 12 8-12-8-8z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M4 10h16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 2v20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
             <button class="minimize-btn" title="Minimize" id="btn-minimize">-</button>
         `;
 
