@@ -96,9 +96,9 @@ async function handleProfilePage(hud) {
     chrome.runtime.sendMessage({ type: 'GET_HUNTER', handle }, async (response) => {
         if (!response.ok) {
             if (response.reason === 'PROCESSING') {
-                startRegistrationFlow(hud, handle, response.isColdStart);
+                beginStreamingIntel(hud, handle, response.isColdStart, loggedInProfile);
             } else if (response.reason === 'NOT_FOUND') {
-                startRegistrationFlow(hud, handle, false);
+                startRegistrationFlow(hud, handle, false, loggedInProfile);
             } else if (response.reason === 'UNREACHABLE') {
                 updateHUDContent(hud, `SYSTEM temporarily unreachable.<br><button id="btn-retry">Retry</button>`);
                 
@@ -143,7 +143,7 @@ async function fetchContestsParticipated(handle) {
     return 0;
 }
 
-function startRegistrationFlow(hud, handle, isColdStart) {
+function startRegistrationFlow(hud, handle, isColdStart, loggedInProfile) {
     let narrativeHtml = `Unknown Hunter Detected: ${handle}`;
     if (isColdStart) {
         narrativeHtml = `SYSTEM waking up...<br>` + narrativeHtml;
@@ -156,56 +156,64 @@ function startRegistrationFlow(hud, handle, isColdStart) {
         if (e.detail.action === 'btn-analyze') {
             hud.content.removeEventListener('system-action', actionHandler);
             
-            // Trigger POST request to backend via Service Worker to ensure job starts!
-            chrome.runtime.sendMessage({ type: 'REFRESH_HUNTER', handle }, () => {
+            // Trigger GET request to backend via Service Worker to ensure registration job starts if not found!
+            chrome.runtime.sendMessage({ type: 'GET_HUNTER', handle }, () => {
                 // Ignore response, just kick off the job
             });
 
-            updateHUDContent(hud, `GATHERING HUNTER INTEL...<br><div id="sse-stage" style="margin-top:16px; color:var(--sys-frame-primary);"></div>`);
-            const stageDiv = queryHUD(hud, '#sse-stage');
-            
-            startRegistrationStream(handle, (data) => {
-                if (data.stage && stageDiv) {
-                    stageDiv.innerText = formatStage(data.stage);
-                }
-            }, async (data) => {
-            if (data.status === 'READY') {
-                const fetchAndRender = async () => {
-                    chrome.runtime.sendMessage({ type: 'GET_HUNTER', handle }, async (profileResponse) => {
-                        if (profileResponse.ok) {
-                            const oldProfile = await getCachedProfile(handle);
-                            checkMilestones(oldProfile, profileResponse.data);
-                            await setCachedProfile(handle, profileResponse.data);
-                            renderProfile(hud, profileResponse.data, loggedInProfile);
-                        } else {
-                            updateHUDContent(hud, `Failed to fetch profile.`);
-                        }
-                    });
-                };
-
-                if (data.profile) {
-                    const oldProfile = await getCachedProfile(handle);
-                    checkMilestones(oldProfile, data.profile);
-                    await setCachedProfile(handle, data.profile);
-                    renderProfile(hud, data.profile, loggedInProfile);
-                } else {
-                    fetchAndRender();
-                }
-            } else {
-                updateHUDContent(hud, `Registration Failed.`);
-            }
-        }, (err) => {
-            if (stageDiv) {
-                stageDiv.innerHTML += `<br><br><span style="color: var(--sys-color-danger);">[Stream Error - Falling back to polling...]</span><br><span style="font-size: 15px; color: var(--sys-text-muted); font-family: var(--sys-font-secondary); margin-top: 4px; display: inline-block;">If data does not appear in 5 seconds, please refresh.</span>`;
-            }
-            pollStatus(hud, handle);
-        });
+            beginStreamingIntel(hud, handle, false, loggedInProfile);
         } // Close if
     };
     hud.content.addEventListener('system-action', actionHandler);
 }
 
-function pollStatus(hud, handle) {
+function beginStreamingIntel(hud, handle, isColdStart, loggedInProfile) {
+    let narrativeHtml = `GATHERING HUNTER INTEL...`;
+    if (isColdStart) {
+        narrativeHtml = `SYSTEM waking up...<br>` + narrativeHtml;
+    }
+    updateHUDContent(hud, `${narrativeHtml}<br><div id="sse-stage" style="margin-top:16px; color:var(--sys-frame-primary);"></div>`);
+    const stageDiv = queryHUD(hud, '#sse-stage');
+    
+    startRegistrationStream(handle, (data) => {
+        if (data.stage && stageDiv) {
+            stageDiv.innerText = formatStage(data.stage);
+        }
+    }, async (data) => {
+        if (data.status === 'READY' || data.stage === 'READY') {
+            const fetchAndRender = async () => {
+                chrome.runtime.sendMessage({ type: 'GET_HUNTER', handle }, async (profileResponse) => {
+                    if (profileResponse.ok) {
+                        const oldProfile = await getCachedProfile(handle);
+                        checkMilestones(oldProfile, profileResponse.data);
+                        await setCachedProfile(handle, profileResponse.data);
+                        renderProfile(hud, profileResponse.data, loggedInProfile);
+                    } else {
+                        updateHUDContent(hud, `Failed to fetch profile.`);
+                    }
+                });
+            };
+
+            if (data.profile) {
+                const oldProfile = await getCachedProfile(handle);
+                checkMilestones(oldProfile, data.profile);
+                await setCachedProfile(handle, data.profile);
+                renderProfile(hud, data.profile, loggedInProfile);
+            } else {
+                fetchAndRender();
+            }
+        } else {
+            updateHUDContent(hud, `Registration Failed.`);
+        }
+    }, (err) => {
+        if (stageDiv) {
+            stageDiv.innerHTML += `<br><br><span style="color: var(--sys-color-danger);">[Stream Error - Falling back to polling...]</span><br><span style="font-size: 15px; color: var(--sys-text-muted); font-family: var(--sys-font-secondary); margin-top: 4px; display: inline-block;">If data does not appear in 5 seconds, please refresh.</span>`;
+        }
+        pollStatus(hud, handle, loggedInProfile);
+    });
+}
+
+function pollStatus(hud, handle, loggedInProfile) {
     const stageDiv = queryHUD(hud, '#sse-stage');
     
     let dots = 0;
