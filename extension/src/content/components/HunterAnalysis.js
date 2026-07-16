@@ -112,9 +112,18 @@ export class HunterAnalysis {
                     <div class="hunter-sub" style="display: flex; align-items: center; gap: 6px; color:${rankTier.color}; margin-top: 4px; font-size: 16px; font-family: var(--sys-font-secondary); letter-spacing: 1px;">[${rankTier.label.toUpperCase()}] <span class="sys-info-btn" data-info="rank" style="cursor: pointer; color: var(--sys-frame-primary); font-size: 10px; border: 1px solid var(--sys-frame-primary); padding: 0 4px; border-radius: 2px; user-select: none;">i</span></div>
                     <div class="hunter-sub" style="display: flex; align-items: center; gap: 6px; color:${primaryColor}; margin-top: 4px; font-size: 16px; font-family: var(--sys-font-secondary); letter-spacing: 1px;">${hunterClassLabel.toUpperCase()} <span class="sys-info-btn" data-info="type" style="cursor: pointer; color: ${primaryColor}; font-size: 10px; border: 1px solid ${primaryColor}; padding: 0 4px; border-radius: 2px; user-select: none;">i</span></div>
                     <div style="margin-top: 8px;">
-                        <button id="btn-reanalyze" class="sys-info-btn" style="cursor: pointer; color: var(--sys-frame-primary); font-size: 10px; border: 1px solid var(--sys-frame-primary); padding: 4px 8px; border-radius: 2px; font-family: var(--sys-font-secondary); background: transparent; letter-spacing: 1px; text-transform: uppercase; transition: all 0.2s ease;">
-                            ◆ RE-ANALYZE
-                        </button>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <button id="btn-reanalyze" class="sys-info-btn" style="cursor: pointer; color: var(--sys-frame-primary); font-size: 10px; border: 1px solid var(--sys-frame-primary); padding: 4px 8px; border-radius: 2px; font-family: var(--sys-font-secondary); background: transparent; letter-spacing: 1px; text-transform: uppercase; transition: all 0.2s ease;">
+                                ◆ RE-ANALYZE
+                            </button>
+                            <button id="btn-support" class="sys-info-btn" title="Donate Mana (Support System Architect)" style="cursor: pointer; color: var(--sys-frame-primary); border: 1px solid var(--sys-frame-primary); padding: 4px; border-radius: 2px; background: transparent; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; height: 23px; width: 23px; box-sizing: border-box;">
+                                <svg viewBox="0 0 24 24" fill="none" style="width: 14px; height: 14px; filter: drop-shadow(0 0 2px var(--sys-glow));" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 2L4 10l8 12 8-12-8-8z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M4 10h16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M12 2v20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                        </div>
                         <div id="reanalyze-sse" style="color: var(--sys-frame-primary); font-size: 10px; margin-top: 4px; font-family: var(--sys-font-secondary); height: 12px; letter-spacing: 1px;"></div>
                     </div>
                 </div>
@@ -386,6 +395,15 @@ export class HunterAnalysis {
                         }
                     }
                 });
+            });
+        }
+
+        // Setup Support Button
+        const supportBtn = this.shadowRoot.getElementById('btn-support');
+        if (supportBtn) {
+            supportBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                chrome.runtime.sendMessage({ type: 'OPEN_POPUP' });
             });
         }
     }
