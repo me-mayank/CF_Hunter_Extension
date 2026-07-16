@@ -44,6 +44,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         healthz().then(sendResponse);
         return true;
     }
+
+    if (request.type === 'OPEN_POPUP') {
+        chrome.action.openPopup({ windowId: sender.tab.windowId }).catch(err => console.error('Failed to open popup:', err));
+        return true;
+    }
 });
 
 chrome.commands.onCommand.addListener((command) => {
