@@ -403,7 +403,8 @@ export class HunterAnalysis {
         if (supportBtn) {
             supportBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                chrome.runtime.sendMessage({ type: 'OPEN_POPUP' });
+                const popupUrl = chrome.runtime.getURL('src/popup/popup.html');
+                window.open(popupUrl, 'SystemShop', 'width=320,height=500,menubar=no,toolbar=no,location=no,status=no,resizable=yes');
             });
         }
     }
