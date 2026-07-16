@@ -35,6 +35,18 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         return true;
     }
 
+    if (request.type === 'OPEN_POPUP') {
+        const popupUrl = chrome.runtime.getURL('src/popup/popup.html');
+        chrome.windows.create({
+            url: popupUrl,
+            type: 'popup',
+            width: 320,
+            height: 450,
+            focused: true
+        });
+        return true;
+    }
+
     if (request.type === 'COMPARE_HUNTERS') {
         compareHunters(request.handleA, request.handleB).then(sendResponse);
         return true;
@@ -42,11 +54,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
     if (request.type === 'HEALTHZ') {
         healthz().then(sendResponse);
-        return true;
-    }
-
-    if (request.type === 'OPEN_POPUP') {
-        chrome.action.openPopup({ windowId: sender.tab.windowId }).catch(err => console.error('Failed to open popup:', err));
         return true;
     }
 });
