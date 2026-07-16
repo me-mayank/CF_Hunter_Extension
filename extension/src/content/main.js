@@ -92,14 +92,14 @@ async function handleProfilePage(hud) {
 
     updateHUDContent(hud, `Fetching data from Hunter Association...`);
     
-    // Fetch from background service worker
-    chrome.runtime.sendMessage({ type: 'GET_HUNTER', handle }, async (response) => {
-        if (!response.ok) {
-            if (response.reason === 'PROCESSING') {
-                beginStreamingIntel(hud, handle, response.isColdStart, loggedInProfile);
-            } else if (response.reason === 'NOT_FOUND') {
+    // Fetch from background service worker to check status without triggering scan
+    chrome.runtime.sendMessage({ type: 'GET_STATUS', handle }, async (statusResponse) => {
+        if (!statusResponse.ok) {
+            if (statusResponse.reason === 'PROCESSING') {
+                beginStreamingIntel(hud, handle, statusResponse.isColdStart, loggedInProfile);
+            } else if (statusResponse.reason === 'NOT_FOUND') {
                 startRegistrationFlow(hud, handle, false, loggedInProfile);
-            } else if (response.reason === 'UNREACHABLE') {
+            } else if (statusResponse.reason === 'UNREACHABLE') {
                 updateHUDContent(hud, `SYSTEM temporarily unreachable.<br><button id="btn-retry">Retry</button>`);
                 
                 const retryHandler = (e) => {
@@ -110,23 +110,30 @@ async function handleProfilePage(hud) {
                 };
                 hud.content.addEventListener('system-action', retryHandler);
             } else {
-                updateHUDContent(hud, `Error: ${response.reason}`);
+                updateHUDContent(hud, `Error: ${statusResponse.reason}`);
             }
             return;
         }
 
-        // 200 OK
-        if (response.isColdStart) {
-            updateHUDContent(hud, `SYSTEM was sleeping. Waking up...`);
-            await new Promise(r => setTimeout(r, 1000));
-        }
-
-        checkMilestones(profile, response.data);
-        
-        response.data.contestsParticipated = await fetchContestsParticipated(handle);
-        await setCachedProfile(handle, response.data);
-        
-        renderProfile(hud, response.data, loggedInProfile);
+        // 200 OK (Status is READY) -> Now fetch actual profile
+        chrome.runtime.sendMessage({ type: 'GET_HUNTER', handle }, async (response) => {
+            if (response.ok) {
+                if (response.isColdStart) {
+                    updateHUDContent(hud, `SYSTEM was sleeping. Waking up...`);
+                    await new Promise(r => setTimeout(r, 1000));
+                }
+                
+                const oldProfile = await getCachedProfile(handle);
+                checkMilestones(oldProfile, response.data);
+                
+                response.data.contestsParticipated = await fetchContestsParticipated(handle);
+                await setCachedProfile(handle, response.data);
+                
+                renderProfile(hud, response.data, loggedInProfile);
+            } else {
+                updateHUDContent(hud, `Error: ${response.reason}`);
+            }
+        });
     });
 }
 
