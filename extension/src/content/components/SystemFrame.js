@@ -95,23 +95,23 @@ export class SystemFrame {
                     overflow: visible;
                 }
                 .p-line {
-                    stroke: var(--sys-frame-primary);
+                    stroke: var(--sys-outer-frame);
                     stroke-width: var(--sys-border-primary);
                     fill: none;
                 }
                 .s-line {
-                    stroke: var(--sys-frame-secondary);
+                    stroke: var(--sys-outer-frame-sec);
                     stroke-width: var(--sys-border-secondary);
                     fill: none;
                 }
                 .fill-primary {
-                    fill: var(--sys-frame-primary);
+                    fill: var(--sys-outer-frame);
                 }
                 .travel-line {
-                    stroke: #7DFFFF;
+                    stroke: #1EDBFF;
                     stroke-width: 2.5px;
                     fill: none;
-                    filter: drop-shadow(0 0 8px #7DFFFF) drop-shadow(0 0 16px var(--sys-glow));
+                    filter: drop-shadow(0 0 8px #1EDBFF) drop-shadow(0 0 16px #1EDBFF);
                     stroke-dasharray: 15 100;
                     stroke-dashoffset: 115;
                     animation-name: travel-glow;

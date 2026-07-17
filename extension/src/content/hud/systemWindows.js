@@ -31,8 +31,8 @@ function renderToast(toast) {
     windowEl.innerHTML = `
         <div class="system-panel-inner-brackets"></div>
         <div class="scanline-sweep"></div>
-        <div class="hunter-window-title" style="font-size:14px; margin-bottom:4px;">[ ${toast.title} ]</div>
-        <div class="hunter-window-message" style="color:var(--sys-text); font-size: 14px;">${toast.message}</div>
+        <div class="hunter-window-title" style="font-size:14px; margin-bottom:4px; color: #1EDBFF;">[ ${toast.title} ]</div>
+        <div class="hunter-window-message" style="color:#F8FAFC; font-size: 14px;">${toast.message}</div>
     `;
     
     const root = document.getElementById('hunter-system-hud-root');
@@ -102,10 +102,10 @@ export function showSystemInfo(title, message) {
     windowEl.innerHTML = `
         <div class="system-panel-inner-brackets"></div>
         <div class="scanline-sweep"></div>
-        <div class="hunter-window-title" style="font-size:14px; margin-bottom:12px; color: var(--sys-color-level);">[ ${title} ]</div>
-        <div class="hunter-window-message" style="color:var(--sys-text); font-size: 13px; line-height: 1.5; text-align: left;">${message}</div>
+        <div class="hunter-window-title" style="font-size:14px; margin-bottom:12px; color: #1EDBFF;">[ ${title} ]</div>
+        <div class="hunter-window-message" style="color:#F8FAFC; font-size: 13px; line-height: 1.5; text-align: left;">${message}</div>
         <div style="margin-top: 16px; text-align: right;">
-            <button class="sys-close-btn" style="background: rgba(0,0,0,0.5); border: 1px solid var(--sys-frame-primary); color: var(--sys-frame-primary); padding: 4px 12px; font-family: var(--sys-font-secondary); font-size: 11px; cursor: pointer; text-transform: uppercase;">Acknowledge</button>
+            <button class="sys-close-btn" style="background: rgba(0,0,0,0.5); border: 1px solid #1EDBFF; color: #1EDBFF; padding: 4px 12px; font-family: 'Share Tech Mono', monospace; font-size: 11px; cursor: pointer; text-transform: uppercase;">Acknowledge</button>
         </div>
     `;
 

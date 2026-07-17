@@ -80,8 +80,8 @@ export class SystemGlass {
                     content: '';
                     position: absolute;
                     top: -10%; left: 0; right: 0; height: 10px;
-                    background: rgba(0, 240, 255, 0.62);
-                    box-shadow: 0 0 31px rgba(0, 240, 255, 1.0);
+                    background: rgba(157, 0, 255, 0.62);
+                    box-shadow: 0 0 31px rgba(157, 0, 255, 1.0);
                     animation: scanline 0.8s linear;
                     pointer-events: none;
                     z-index: 100;

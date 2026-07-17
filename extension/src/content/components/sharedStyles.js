@@ -1,15 +1,19 @@
 export const systemTokens = `
     :host {
         /* Color Palette from Reference */
-        --sys-frame-primary: #1EDBFF;
-        --sys-frame-secondary: rgba(102, 230, 255, 0.35);
+        --sys-frame-primary: #9D00FF;
+        --sys-frame-secondary: rgba(157, 0, 255, 0.35);
         --sys-frame-dark: rgba(12, 22, 38, 0.92);
-        --sys-glow: #66E6FF;
-        --sys-glow-subtle: rgba(102, 230, 255, 0.2);
-        --sys-glass-border: #69D6FF;
+        --sys-glow: #C466FF;
+        --sys-glow-subtle: rgba(196, 102, 255, 0.2);
+        
+        /* Outer Frame Accents */
+        --sys-outer-frame: #9D00FF;
+        --sys-outer-frame-sec: rgba(157, 0, 255, 0.35);
+        --sys-glass-border: #C466FF;
         
         /* Glass Material */
-        --sys-glass-bg: rgba(14, 34, 59, 0.75);
+        --sys-glass-bg: rgba(10, 10, 15, 0.75);
         --sys-blur: blur(8px);
         
         /* Line Weights */

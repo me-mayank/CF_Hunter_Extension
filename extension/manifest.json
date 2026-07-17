@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "CF Hunter System",
   "version": "8.7.40",
-  "description": "Codeforces Hunter System holographic overlay.",
+  "description": "Codeforces Hunter System holographic overlay, Inspired by SYSTEM of Solo Levelling.",
   "permissions": [
     "storage",
     "contextMenus"

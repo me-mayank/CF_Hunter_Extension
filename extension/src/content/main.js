@@ -38,7 +38,17 @@ export async function main() {
     } else if (pageType === PAGE_TYPES.CONTEST) {
         await handleContestPage(hud);
     } else {
-        updateHUDContent(hud, `Standby Mode.<br>Awaiting relevant targets.<br><span style="font-size: 11px; opacity: 0.6; color: var(--sys-frame-primary); margin-top: 8px; display: block;">Relevant targets are Hunter Profile (user profile), Dungeon (Contest) and Monster (problems)</span>`);
+        updateHUDContent(hud, `
+            <div style="text-align: center; margin-bottom: 12px;">Standby Mode.<br>Awaiting relevant targets.</div>
+            <div style="font-size: 11px; opacity: 0.9; color: #1EDBFF; text-align: left; display: inline-block;">
+                Relevant targets:
+                <ul style="margin-top: 4px; margin-bottom: 0; padding-left: 18px; line-height: 1.4;">
+                    <li>Hunter Profile (user profile)</li>
+                    <li>Dungeon (Contest)</li>
+                    <li>Monster (problems)</li>
+                </ul>
+            </div>
+        `);
     }
 }
 

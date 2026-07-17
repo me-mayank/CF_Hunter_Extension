@@ -109,14 +109,14 @@ export class HunterAnalysis {
                 <img class="avatar" src="${avatarUrl}" alt="${profile.handle}" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 72 72%22><rect width=%2272%22 height=%2272%22 fill=%22%230f172a%22/><path d=%22M36 20C29.373 20 24 25.373 24 32C24 38.627 29.373 44 36 44C42.627 44 48 38.627 48 32C48 25.373 42.627 20 36 20ZM36 48C24.954 48 16 56.954 16 68H56C56 56.954 47.046 48 36 48Z%22 fill=%22%23334155%22/></svg>';">
                 <div style="display: flex; flex-direction: column;">
                     <div class="hunter-name" style="color: #F8FAFC; font-size: 24px; text-shadow: 0 0 10px rgba(248, 250, 252, 0.4); font-weight: bold;">${(profile.displayName || profile.handle).toUpperCase()}</div>
-                    <div class="hunter-sub" style="display: flex; align-items: center; gap: 6px; color:${rankTier.color}; margin-top: 4px; font-size: 16px; font-family: var(--sys-font-secondary); letter-spacing: 1px;">[${rankTier.label.toUpperCase()}] <span class="sys-info-btn" data-info="rank" style="cursor: pointer; color: var(--sys-frame-primary); font-size: 10px; border: 1px solid var(--sys-frame-primary); padding: 0 4px; border-radius: 2px; user-select: none;">i</span></div>
-                    <div class="hunter-sub" style="display: flex; align-items: center; gap: 6px; color:${primaryColor}; margin-top: 4px; font-size: 16px; font-family: var(--sys-font-secondary); letter-spacing: 1px;">${hunterClassLabel.toUpperCase()} <span class="sys-info-btn" data-info="type" style="cursor: pointer; color: ${primaryColor}; font-size: 10px; border: 1px solid ${primaryColor}; padding: 0 4px; border-radius: 2px; user-select: none;">i</span></div>
+                    <div class="hunter-sub" style="display: flex; align-items: center; gap: 6px; color:${rankTier.color}; margin-top: 4px; font-size: 16px; font-family: var(--sys-font-secondary); letter-spacing: 1px;">[${rankTier.label.toUpperCase()}] <span class="sys-info-btn" data-info="rank" style="cursor: pointer; color: #1EDBFF; font-size: 10px; border: 1px solid #1EDBFF; padding: 0 4px; border-radius: 2px; user-select: none; text-transform: lowercase;">i</span></div>
+                    <div class="hunter-sub" style="display: flex; align-items: center; gap: 6px; color:${primaryColor}; margin-top: 4px; font-size: 16px; font-family: var(--sys-font-secondary); letter-spacing: 1px;">${hunterClassLabel.toUpperCase()} <span class="sys-info-btn" data-info="type" style="cursor: pointer; color: ${primaryColor}; font-size: 10px; border: 1px solid ${primaryColor}; padding: 0 4px; border-radius: 2px; user-select: none; text-transform: lowercase;">i</span></div>
                     <div style="margin-top: 8px;">
                         <div style="display: flex; align-items: center; gap: 8px;">
-                            <button id="btn-reanalyze" class="sys-info-btn" style="cursor: pointer; color: var(--sys-frame-primary); font-size: 10px; border: 1px solid var(--sys-frame-primary); padding: 4px 8px; border-radius: 2px; font-family: var(--sys-font-secondary); background: transparent; letter-spacing: 1px; text-transform: uppercase; transition: all 0.2s ease;">
+                            <button id="btn-reanalyze" class="sys-info-btn" style="cursor: pointer; color: #1EDBFF; font-size: 10px; border: 1px solid #1EDBFF; padding: 4px 8px; border-radius: 2px; font-family: var(--sys-font-secondary); background: transparent; letter-spacing: 1px; text-transform: uppercase; transition: all 0.2s ease;">
                                 ◆ RE-ANALYZE
                             </button>
-                            <button id="btn-support" class="sys-info-btn" title="Donate Mana (Support System Architect)" style="cursor: pointer; color: var(--sys-frame-primary); border: 1px solid var(--sys-frame-primary); padding: 4px; border-radius: 2px; background: transparent; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; height: 23px; width: 23px; box-sizing: border-box;">
+                            <button id="btn-support" class="sys-info-btn" title="Donate Mana (Support System Architect)" style="cursor: pointer; color: #1EDBFF; border: 1px solid #1EDBFF; padding: 4px; border-radius: 2px; background: transparent; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; height: 23px; width: 23px; box-sizing: border-box;">
                                 <svg viewBox="0 0 24 24" fill="none" style="width: 14px; height: 14px; filter: drop-shadow(0 0 2px var(--sys-glow));" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M12 2L4 10l8 12 8-12-8-8z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                     <path d="M4 10h16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -124,7 +124,7 @@ export class HunterAnalysis {
                                 </svg>
                             </button>
                         </div>
-                        <div id="reanalyze-sse" style="color: var(--sys-frame-primary); font-size: 10px; margin-top: 4px; font-family: var(--sys-font-secondary); height: 12px; letter-spacing: 1px;"></div>
+                        <div id="reanalyze-sse" style="color: #1EDBFF; font-size: 10px; margin-top: 4px; font-family: var(--sys-font-secondary); height: 12px; letter-spacing: 1px;"></div>
                     </div>
                 </div>
             </div>
@@ -137,7 +137,7 @@ export class HunterAnalysis {
             <div class="anim-seq delay-3" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 12px; width: 100%;">
                 <div style="display: flex; flex-direction: column; gap: 4px;">
                     <div style="display: flex; justify-content: space-between; align-items: baseline;">
-                        <div class="sys-label" style="font-size: 14px; display: flex; align-items: center;">HUNTER LEVEL <span class="sys-info-btn" data-info="level" style="cursor: pointer; color: var(--sys-frame-primary); font-size: 10px; border: 1px solid var(--sys-frame-primary); padding: 0 4px; border-radius: 2px; margin-left: 6px; user-select: none;">i</span></div>
+                        <div class="sys-label" style="font-size: 14px; display: flex; align-items: center;">HUNTER LEVEL <span class="sys-info-btn" data-info="level" style="cursor: pointer; color: #1EDBFF; font-size: 10px; border: 1px solid #1EDBFF; padding: 0 4px; border-radius: 2px; margin-left: 6px; user-select: none; text-transform: lowercase;">i</span></div>
                         <div class="sys-value" style="color: var(--sys-color-level); font-size: 18px;">Lv. <span id="stat-level">${profile.hunterLevel || 0}</span></div>
                     </div>
                     <div class="sys-label" style="font-size: 11px; margin-top: 4px; color: var(--sys-text-muted);">RANK PROGRESS</div>
@@ -167,7 +167,7 @@ export class HunterAnalysis {
 
         let bottomRowHtml = `
             <div class="anim-seq delay-5" style="display: flex; justify-content: space-between; align-items: baseline; width: 100%; margin-bottom: 4px;">
-                <div class="sys-label" style="font-size: 14px; display: flex; align-items: center;">PRIMARY AFFINITY <span class="sys-info-btn" data-info="affinity" style="cursor: pointer; color: var(--sys-frame-primary); font-size: 10px; border: 1px solid var(--sys-frame-primary); padding: 0 4px; border-radius: 2px; margin-left: 6px; user-select: none;">i</span></div>
+                <div class="sys-label" style="font-size: 14px; display: flex; align-items: center;">PRIMARY AFFINITY <span class="sys-info-btn" data-info="affinity" style="cursor: pointer; color: #1EDBFF; font-size: 10px; border: 1px solid #1EDBFF; padding: 0 4px; border-radius: 2px; margin-left: 6px; user-select: none; text-transform: lowercase;">i</span></div>
                 <div class="sys-value" style="color: ${primaryColor}; font-size: 16px;">${dominantSkill.toUpperCase()}</div>
             </div>
         `;
@@ -276,8 +276,8 @@ export class HunterAnalysis {
                 .delay-5 { animation-delay: 1.0s; }
                 .sys-info-btn:hover {
                     background: rgba(0, 240, 255, 0.1);
-                    text-shadow: 0 0 5px var(--sys-frame-primary);
-                    box-shadow: 0 0 5px var(--sys-frame-primary);
+                    text-shadow: 0 0 5px #1EDBFF;
+                    box-shadow: 0 0 5px #1EDBFF;
                 }
             </style>
 

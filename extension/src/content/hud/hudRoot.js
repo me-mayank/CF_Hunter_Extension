@@ -24,23 +24,23 @@ export function initHUD(pageType) {
         }
         .system-online-badge {
             position: relative;
-            background: rgba(0, 255, 255, 0.05);
-            border: 1px solid rgba(0, 255, 255, 0.3);
-            border-left: 3px solid #00ffff;
-            color: #00ffff;
+            background: rgba(0, 153, 255, 0.1);
+            border: 1px solid rgba(0, 153, 255, 0.5);
+            border-left: 4px solid #0099ff;
+            color: #0099ff;
             font-family: 'Share Tech Mono', monospace;
             font-size: 13px;
             cursor: pointer;
-            border-radius: 2px;
+            border-radius: 0;
             font-weight: bold;
             height: 26px;
-            padding: 0 10px;
+            padding: 0 12px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 0 10px rgba(0, 255, 255, 0.1), inset 0 0 10px rgba(0, 255, 255, 0.05);
-            transition: all 0.3s ease;
-            margin: 0 0 0 4px;
+            box-shadow: 0 0 10px rgba(0, 153, 255, 0.15), inset 0 0 8px rgba(0, 153, 255, 0.1);
+            transition: all 0.2s ease;
+            margin: 0 0 0 6px;
             line-height: normal;
             box-sizing: border-box;
             top: -3px;
@@ -49,9 +49,9 @@ export function initHUD(pageType) {
         }
         
         .system-online-badge:hover {
-            background: rgba(0, 255, 255, 0.15);
-            border-color: #00ffff;
-            box-shadow: 0 0 15px rgba(0, 255, 255, 0.3), inset 0 0 10px rgba(0, 255, 255, 0.1);
+            background: rgba(0, 153, 255, 0.15);
+            border-color: #0099ff;
+            box-shadow: 0 0 15px rgba(0, 153, 255, 0.25), inset 0 0 12px rgba(0, 153, 255, 0.2);
             transform: translateY(-1px);
             animation: none; /* stop glitch on hover */
         }
@@ -60,7 +60,7 @@ export function initHUD(pageType) {
             position: relative;
             z-index: 2;
             letter-spacing: 2px;
-            text-shadow: 0 0 6px rgba(0, 255, 255, 0.7);
+            text-shadow: 0 0 4px rgba(0, 153, 255, 0.4);
             margin-bottom: -1px; /* Visual centering for this font */
             animation: periodic-text-glitch 3s infinite;
         }

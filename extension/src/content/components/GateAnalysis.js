@@ -229,7 +229,7 @@ export class GateAnalysis {
 
                 <div class="system-rec anim-seq delay-5">${shortRec}</div>
                 <div class="growth-rec anim-seq delay-5" style="font-size: 13px; color: var(--sys-text-muted); text-align: center; margin-top: 6px; letter-spacing: 1px; font-family: var(--sys-font-primary);">
-                    SYSTEM PREDICTION: <span style="color: var(--sys-frame-primary);">${growthLabel}</span>
+                    SYSTEM PROJECTION: <span style="color: #1EDBFF; text-shadow: 0 0 8px rgba(30, 219, 255, 0.4);">${growthLabel}</span>
                 </div>
             </div>
         `;

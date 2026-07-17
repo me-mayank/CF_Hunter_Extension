@@ -8,7 +8,7 @@ export function renderManaGauge(currentMana, peakMana, color = 'var(--sys-color-
 
     const delayClass = animate ? 'anim-seq delay-4' : '';
     
-    const infoBtnHtml = showInfoBtn ? `<span class="sys-info-btn" data-info="mana" style="cursor: pointer; color: var(--sys-frame-primary); font-size: 10px; border: 1px solid var(--sys-frame-primary); padding: 0 4px; border-radius: 2px; margin-left: 6px; user-select: none;">i</span>` : '';
+    const infoBtnHtml = showInfoBtn ? `<span class="sys-info-btn" data-info="mana" style="cursor: pointer; color: #1EDBFF; font-size: 10px; border: 1px solid #1EDBFF; padding: 0 4px; border-radius: 2px; margin-left: 6px; user-select: none; text-transform: lowercase;">i</span>` : '';
     
     return `
         <div class="mana-gauge-container ${delayClass}" style="width: 100%; margin: 8px 0 12px 0; display: flex; flex-direction: column; gap: 4px;">
