@@ -198,6 +198,17 @@ export function initHUD(pageType) {
             saveHUDState(savedState);
         }
     });
+
+    document.addEventListener('keydown', (e) => {
+        // e.code === 'KeyS' handles Option+S on Mac even if it types a special char
+        if (e.altKey && e.code === 'KeyS') {
+            e.preventDefault();
+            const isHidden = container.style.display === 'none';
+            container.style.display = isHidden ? 'block' : 'none';
+            savedState.collapsed = !isHidden;
+            saveHUDState(savedState);
+        }
+    });
     
     const savedState = loadHUDState() || { collapsed: false, left: null, top: null };
 
