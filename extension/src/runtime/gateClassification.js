@@ -10,9 +10,9 @@ export function classifyGate(contestName) {
     // Find matching classification by checking substrings
     for (const cls of GATE_CLASSIFICATIONS) {
         if (lowerName.includes(cls.pattern)) {
-            return { label: cls.label, color: cls.color, glow: cls.glow };
+            return { label: cls.label, color: cls.color, glow: cls.glow, tier: cls.tier };
         }
     }
     
-    return { label: "Unknown Gate", color: "#8a8f98", glow: "rgba(138, 143, 152, 0.4)" };
+    return { label: "Unknown Gate", color: "#8a8f98", glow: "rgba(138, 143, 152, 0.4)", tier: -1 };
 }

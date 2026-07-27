@@ -1,5 +1,5 @@
 import { systemTokens, typography } from './sharedStyles.js';
-import { formatNumber } from '../../shared/terminology.js';
+import { formatNumber, translateRank } from '../../shared/terminology.js';
 
 import { SystemHeader } from './SystemHeader.js';
 
@@ -96,23 +96,10 @@ export class GateAnalysis {
             return;
         }
 
-        const hunterMana = window.hunterProfileCache ? window.hunterProfileCache.manaPower || 0 : 0;
-        const recMana = analysis.recommendedMana || 0;
-        
-        let titleColor = analysis.classificationObj.color;
-        let titleGlow = analysis.classificationObj.glow;
-
-        // Base Relative Threat Color
-        if (hunterMana < recMana) {
-            titleColor = "var(--sys-color-danger)"; // Red
-            titleGlow = "rgba(255, 94, 94, 0.6)";
-        } else if (hunterMana >= recMana * 1.5) {
-            titleColor = "var(--sys-color-level)"; // Greenish
-            titleGlow = "rgba(75, 227, 138, 0.6)";
-        } else {
-            titleColor = "var(--sys-text)"; // White
-            titleGlow = "rgba(255, 255, 255, 0.4)";
-        }
+        const hunterRating = window.hunterProfileCache ? window.hunterProfileCache.rating || 0 : 0;
+        const hunterRankObj = translateRank(hunterRating);
+        const hunterTier = hunterRankObj.tier || 1;
+        const gateTier = analysis.classificationObj.tier || -1;
 
         let shortRec = "";
         if (analysis.status === "FINISHED") {
@@ -125,19 +112,47 @@ export class GateAnalysis {
         
         let relativeThreat = "EQUAL MATCH";
         let growthLabel = "STEADY GROWTH EXPECTED";
+        
+        // titleColor is based on Threat
+        let titleColor = "#1EDBFF"; // Cyan default for EQUAL MATCH
+        let titleGlow = "rgba(30, 219, 255, 0.5)";
 
-        if (hunterMana < recMana * 0.5) {
-            relativeThreat = "CATASTROPHIC RISK";
-            growthLabel = "EXTREME LEVEL-UP POTENTIAL";
-        } else if (hunterMana < recMana) {
-            relativeThreat = "HIGH RISK";
-            growthLabel = "SUBSTANTIAL GROWTH YIELD";
-        } else if (hunterMana >= recMana * 1.5) {
-            relativeThreat = "NO THREAT";
-            growthLabel = "NEGLIGIBLE GROWTH YIELD";
-        } else if (hunterMana >= recMana) {
-            relativeThreat = "LOW RISK";
-            growthLabel = "MODERATE GROWTH YIELD";
+        if (gateTier === -1) {
+            // Training / Simulation Gate
+            relativeThreat = "SIMULATION ACTIVE";
+            growthLabel = "PRACTICE YIELD";
+            titleColor = "#4be38a"; // Green
+            titleGlow = "rgba(75, 227, 138, 0.6)";
+        } else {
+            const tierDiff = gateTier - hunterTier;
+            const isVirtual = analysis.status === "FINISHED";
+            
+            if (tierDiff >= 2) {
+                relativeThreat = "CATASTROPHIC RISK";
+                growthLabel = isVirtual ? "EXTREME LEVEL-UP POTENTIAL" : "EXTREME RANK ASCENSION POTENTIAL";
+                titleColor = "var(--sys-color-danger)"; // Red
+                titleGlow = "rgba(255, 94, 94, 0.6)";
+            } else if (tierDiff === 1) {
+                relativeThreat = "HIGH RISK";
+                growthLabel = isVirtual ? "SUBSTANTIAL EXP YIELD" : "SUBSTANTIAL RANK YIELD";
+                titleColor = "#f97316"; // Orange
+                titleGlow = "rgba(249, 115, 22, 0.6)";
+            } else if (tierDiff === 0) {
+                relativeThreat = "EQUAL MATCH";
+                growthLabel = isVirtual ? "STEADY EXP GAIN EXPECTED" : "STEADY RANK PROGRESS EXPECTED";
+                titleColor = "#1EDBFF"; // Cyan
+                titleGlow = "rgba(30, 219, 255, 0.5)";
+            } else if (tierDiff === -1) {
+                relativeThreat = "LOW RISK";
+                growthLabel = isVirtual ? "MODERATE EXP YIELD" : "MODERATE RANK YIELD";
+                titleColor = "#a3e635"; // Lime green
+                titleGlow = "rgba(163, 230, 53, 0.6)";
+            } else {
+                relativeThreat = "NO THREAT";
+                growthLabel = isVirtual ? "NEGLIGIBLE EXP YIELD" : "NEGLIGIBLE RANK YIELD";
+                titleColor = "var(--sys-color-level)"; // Green
+                titleGlow = "rgba(75, 227, 138, 0.6)";
+            }
         }
 
         if (analysis.status === "FINISHED") {
@@ -190,14 +205,12 @@ export class GateAnalysis {
                     line-height: 1.2;
                 }
                 .system-rec {
-                    font-size: 16px;
-                    font-weight: bold;
-                    color: ${titleColor};
                     text-transform: uppercase;
-                    letter-spacing: 2px;
-                    text-align: center;
+                    font-size: 14px;
+                    letter-spacing: 1px;
+                    font-weight: bold;
                     margin-top: 16px;
-                    font-family: var(--sys-font-primary);
+                    text-align: center;
                 }
                 @keyframes sys-fade-in {
                     from { opacity: 0; transform: translateY(10px); filter: blur(4px); }
@@ -227,9 +240,9 @@ export class GateAnalysis {
                     </div>
                 </div>
 
-                <div class="system-rec anim-seq delay-5">${shortRec}</div>
+                <div class="system-rec anim-seq delay-5" style="color: ${titleColor}; text-shadow: 0 0 8px ${titleGlow};">${shortRec}</div>
                 <div class="growth-rec anim-seq delay-5" style="font-size: 13px; color: var(--sys-text-muted); text-align: center; margin-top: 6px; letter-spacing: 1px; font-family: var(--sys-font-primary);">
-                    SYSTEM PROJECTION: <span style="color: #1EDBFF; text-shadow: 0 0 8px rgba(30, 219, 255, 0.4);">${growthLabel}</span>
+                    SYSTEM PROJECTION: <span style="color: ${titleColor}; text-shadow: 0 0 8px ${titleGlow};">${growthLabel}</span>
                 </div>
             </div>
         `;

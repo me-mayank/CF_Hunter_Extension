@@ -95,34 +95,34 @@ export const THREAT_XP_REWARDS = {
 
 // Hunter Rank Tier Mapping & Colors (Rating driven)
 export const HUNTER_RANKS = [
-    { label: "E-Rank Hunter", color: "#6b7f99", glow: "rgba(107, 127, 153, 0.4)", minRating: 0, maxRating: 1199, nextRankRating: 1200 },
-    { label: "D-Rank Hunter", color: "#4be38a", glow: "rgba(75, 227, 138, 0.4)", minRating: 1200, maxRating: 1399, nextRankRating: 1400 },
-    { label: "C-Rank Hunter", color: "#38e1ff", glow: "rgba(56, 225, 255, 0.4)", minRating: 1400, maxRating: 1599, nextRankRating: 1600 },
-    { label: "B-Rank Hunter", color: "#3ea6ff", glow: "rgba(62, 166, 255, 0.4)", minRating: 1600, maxRating: 1899, nextRankRating: 1900 },
-    { label: "A-Rank Hunter", color: "#8a6bff", glow: "rgba(138, 107, 255, 0.4)", minRating: 1900, maxRating: 2099, nextRankRating: 2100 },
-    { label: "S-Rank Hunter", color: "#ff9d3e", glow: "rgba(255, 157, 62, 0.4)", minRating: 2100, maxRating: 2299, nextRankRating: 2300 },
-    { label: "National Hunter", color: "#ffcf6b", glow: "rgba(255, 207, 107, 0.4)", minRating: 2300, maxRating: 2399, nextRankRating: 2400 },
-    { label: "Monarch Candidate", color: "#ff5e5e", glow: "rgba(255, 94, 94, 0.4)", minRating: 2400, maxRating: 2599, nextRankRating: 2600 },
-    { label: "Monarch", color: "#ff2f6e", glow: "rgba(255, 47, 110, 0.4)", minRating: 2600, maxRating: 2999, nextRankRating: 3000 },
-    { label: "Shadow Monarch", color: "#ffcf6b", glow: "rgba(255, 207, 107, 0.8)", minRating: 3000, maxRating: Infinity, nextRankRating: null }
+    { label: "E-Rank Hunter", color: "#6b7f99", glow: "rgba(107, 127, 153, 0.4)", minRating: 0, maxRating: 1199, nextRankRating: 1200, tier: 1 },
+    { label: "D-Rank Hunter", color: "#4be38a", glow: "rgba(75, 227, 138, 0.4)", minRating: 1200, maxRating: 1399, nextRankRating: 1400, tier: 2 },
+    { label: "C-Rank Hunter", color: "#38e1ff", glow: "rgba(56, 225, 255, 0.4)", minRating: 1400, maxRating: 1599, nextRankRating: 1600, tier: 3 },
+    { label: "B-Rank Hunter", color: "#3ea6ff", glow: "rgba(62, 166, 255, 0.4)", minRating: 1600, maxRating: 1899, nextRankRating: 1900, tier: 4 },
+    { label: "A-Rank Hunter", color: "#8a6bff", glow: "rgba(138, 107, 255, 0.4)", minRating: 1900, maxRating: 2099, nextRankRating: 2100, tier: 5 },
+    { label: "S-Rank Hunter", color: "#ff9d3e", glow: "rgba(255, 157, 62, 0.4)", minRating: 2100, maxRating: 2299, nextRankRating: 2300, tier: 6 },
+    { label: "National Hunter", color: "#ffcf6b", glow: "rgba(255, 207, 107, 0.4)", minRating: 2300, maxRating: 2399, nextRankRating: 2400, tier: 7 },
+    { label: "Monarch Candidate", color: "#ff5e5e", glow: "rgba(255, 94, 94, 0.4)", minRating: 2400, maxRating: 2599, nextRankRating: 2600, tier: 8 },
+    { label: "Monarch", color: "#ff2f6e", glow: "rgba(255, 47, 110, 0.4)", minRating: 2600, maxRating: 2999, nextRankRating: 3000, tier: 9 },
+    { label: "Shadow Monarch", color: "#ffcf6b", glow: "rgba(255, 207, 107, 0.8)", minRating: 3000, maxRating: Infinity, nextRankRating: null, tier: 10 }
 ];
 
 // Gate Classification Mapping
 export const GATE_CLASSIFICATIONS = [
-    { pattern: "educational", label: "Training Gate", color: "#3ea6ff", glow: "rgba(62, 166, 255, 0.4)" },
-    { pattern: "global round", label: "National Gate", color: "#ffcf6b", glow: "rgba(255, 207, 107, 0.4)" },
-    { pattern: "gym", label: "Simulation Gate", color: "#4be38a", glow: "rgba(75, 227, 138, 0.4)" },
-    { pattern: "testing round", label: "Simulation Gate", color: "#4be38a", glow: "rgba(75, 227, 138, 0.4)" },
-    { pattern: "icpc", label: "S-Rank Gate (World-Class Gate)", color: HUNTER_RANKS[5].color, glow: HUNTER_RANKS[5].glow },
-    { pattern: "regional", label: "S-Rank Gate (World-Class Gate)", color: HUNTER_RANKS[5].color, glow: HUNTER_RANKS[5].glow },
-    { pattern: "finals", label: "S-Rank Gate (World-Class Gate)", color: HUNTER_RANKS[5].color, glow: HUNTER_RANKS[5].glow },
-    { pattern: "kotlin heroes", label: "Special Gate", color: "#ffcf6b", glow: "rgba(255, 207, 107, 0.4)" },
-    { pattern: "div. 1 + div. 2", label: "A-Rank Gate", color: HUNTER_RANKS[4].color, glow: HUNTER_RANKS[4].glow },
-    { pattern: "div. 1 + 2", label: "A-Rank Gate", color: HUNTER_RANKS[4].color, glow: HUNTER_RANKS[4].glow },
-    { pattern: "div. 1", label: "S-Rank Gate", color: HUNTER_RANKS[5].color, glow: HUNTER_RANKS[5].glow },
-    { pattern: "div. 2", label: "B-Rank Gate", color: HUNTER_RANKS[3].color, glow: HUNTER_RANKS[3].glow },
-    { pattern: "div. 3", label: "C-Rank Gate", color: HUNTER_RANKS[2].color, glow: HUNTER_RANKS[2].glow },
-    { pattern: "div. 4", label: "E-Rank Gate", color: HUNTER_RANKS[0].color, glow: HUNTER_RANKS[0].glow }
+    { pattern: "educational", label: "Training Gate", color: "#3ea6ff", glow: "rgba(62, 166, 255, 0.4)", tier: -1 },
+    { pattern: "global round", label: "National Gate", color: "#ffcf6b", glow: "rgba(255, 207, 107, 0.4)", tier: 7 },
+    { pattern: "gym", label: "Simulation Gate", color: "#4be38a", glow: "rgba(75, 227, 138, 0.4)", tier: -1 },
+    { pattern: "testing round", label: "Simulation Gate", color: "#4be38a", glow: "rgba(75, 227, 138, 0.4)", tier: -1 },
+    { pattern: "icpc", label: "S-Rank Gate (World-Class Gate)", color: HUNTER_RANKS[5].color, glow: HUNTER_RANKS[5].glow, tier: 6 },
+    { pattern: "regional", label: "S-Rank Gate (World-Class Gate)", color: HUNTER_RANKS[5].color, glow: HUNTER_RANKS[5].glow, tier: 6 },
+    { pattern: "finals", label: "S-Rank Gate (World-Class Gate)", color: HUNTER_RANKS[5].color, glow: HUNTER_RANKS[5].glow, tier: 6 },
+    { pattern: "kotlin heroes", label: "Special Gate", color: "#ffcf6b", glow: "rgba(255, 207, 107, 0.4)", tier: -1 },
+    { pattern: "div. 1 + div. 2", label: "A-Rank Gate", color: HUNTER_RANKS[4].color, glow: HUNTER_RANKS[4].glow, tier: 5 },
+    { pattern: "div. 1 + 2", label: "A-Rank Gate", color: HUNTER_RANKS[4].color, glow: HUNTER_RANKS[4].glow, tier: 5 },
+    { pattern: "div. 1", label: "S-Rank Gate", color: HUNTER_RANKS[5].color, glow: HUNTER_RANKS[5].glow, tier: 6 },
+    { pattern: "div. 2", label: "B-Rank Gate", color: HUNTER_RANKS[3].color, glow: HUNTER_RANKS[3].glow, tier: 4 },
+    { pattern: "div. 3", label: "C-Rank Gate", color: HUNTER_RANKS[2].color, glow: HUNTER_RANKS[2].glow, tier: 3 },
+    { pattern: "div. 4", label: "D-Rank Gate", color: HUNTER_RANKS[1].color, glow: HUNTER_RANKS[1].glow, tier: 2 }
 ];
 
 
